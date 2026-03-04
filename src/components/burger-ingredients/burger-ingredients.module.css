@@ -13,3 +13,20 @@
   text-align: center;
   list-style-type: none;
 }
+
+.custom_scroll {
+  height: 100vh;
+  margin-bottom: 50px;
+  overflow-y: auto;
+}
+
+.all_ingredients {
+  width: 100%;
+}
+
+.ingredients_grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px 24px;
+  list-style-type: none;
+}
