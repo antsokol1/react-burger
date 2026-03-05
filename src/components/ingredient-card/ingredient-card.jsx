@@ -5,14 +5,16 @@ import styles from './ingredient-card.module.css';
 export const IngredientCard = ({ ingredient }) => {
   return (
     <article className={styles.ingredient_card}>
-      <Counter count={100} size="default" />
+      {ingredient.name === 'Краторная булка N-200i' ? (
+        <Counter count={1} size="default" />
+      ) : null}
       <img src={ingredient.image} />
       <div className={styles.price}>
-        <span className="text text_type_digits-default">{ingredient.price}</span>
+        <p className="text text_type_digits-default">{ingredient.price}</p>
         <CurrencyIcon type="primary" />
       </div>
       <div className={styles.price}>
-        <span className="text text_type_main-default">{ingredient.name}</span>
+        <p className="text text_type_main-default">{ingredient.name}</p>
       </div>
     </article>
   );
