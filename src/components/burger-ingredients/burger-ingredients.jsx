@@ -26,7 +26,7 @@ export const BurgerIngredients = ({ ingredients }) => {
 
   function handleTab(value) {
     setTabValue(value);
-    refs[value].current?.scrollIntoView({ bahavior: 'smooth' });
+    refs[value].current?.scrollIntoView({ behavior: 'smooth' });
   }
 
   useEffect(() => {
