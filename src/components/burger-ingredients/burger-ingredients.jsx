@@ -2,11 +2,14 @@ import { Tab } from '@krgaa/react-developer-burger-ui-components';
 import { useRef, useState, useEffect } from 'react';
 
 import { IngredientCard } from '@/components/ingredient-card/ingredient-card';
+import { IngredientDetails } from '@/components/ingredient-details/ingredient-details';
 
 import styles from './burger-ingredients.module.css';
 
 export const BurgerIngredients = ({ ingredients }) => {
   const [tabValue, setTabValue] = useState('bun');
+
+  const [selectedIngredient, setSelectedIngredient] = useState(null);
 
   const groupedIngredients = {
     bun: ingredients.filter((item) => item.type === 'bun'),
@@ -26,7 +29,15 @@ export const BurgerIngredients = ({ ingredients }) => {
 
   function handleTab(value) {
     setTabValue(value);
-    refs[value].current?.scrollIntoView({ bahavior: 'smooth' });
+    refs[value].current?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function handleIngredientCard(ingredient) {
+    setSelectedIngredient(ingredient);
+  }
+
+  function closeIngredientDetails() {
+    setSelectedIngredient(null); // Возвращаем null, а не false
   }
 
   useEffect(() => {
@@ -84,13 +95,16 @@ export const BurgerIngredients = ({ ingredients }) => {
         </ul>
       </nav>
 
-      <section className={`${styles.all_ingredients} ${styles.custom_scroll}`}>
+      <section className={`${styles.all_ingredients} custom-scroll`}>
         <section ref={bunRef}>
           <p className={`${styles.ingredient_kind} text text_type_main-small`}>Булки</p>
           <ul className={styles.ingredients_grid}>
             {groupedIngredients.bun.map((ingredient) => (
               <li key={ingredient._id}>
-                <IngredientCard ingredient={ingredient} />
+                <IngredientCard
+                  ingredient={ingredient}
+                  onClick={() => handleIngredientCard(ingredient)}
+                />
               </li>
             ))}
           </ul>
@@ -103,7 +117,10 @@ export const BurgerIngredients = ({ ingredients }) => {
           <ul className={styles.ingredients_grid}>
             {groupedIngredients.main.map((ingredient) => (
               <li key={ingredient._id}>
-                <IngredientCard ingredient={ingredient} />
+                <IngredientCard
+                  ingredient={ingredient}
+                  onClick={() => handleIngredientCard(ingredient)}
+                />
               </li>
             ))}
           </ul>
@@ -114,12 +131,23 @@ export const BurgerIngredients = ({ ingredients }) => {
           <ul className={styles.ingredients_grid}>
             {groupedIngredients.sauce.map((ingredient) => (
               <li key={ingredient._id}>
-                <IngredientCard ingredient={ingredient} />
+                <IngredientCard
+                  ingredient={ingredient}
+                  onClick={() => handleIngredientCard(ingredient)}
+                />
               </li>
             ))}
           </ul>
         </section>
       </section>
+
+      {selectedIngredient && (
+        <IngredientDetails
+          title={'Детали ингредиента'}
+          ingredient={selectedIngredient}
+          onClose={closeIngredientDetails}
+        ></IngredientDetails>
+      )}
     </section>
   );
 };

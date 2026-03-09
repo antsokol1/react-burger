@@ -6,6 +6,29 @@ import { ingredients } from '@utils/ingredients';
 import styles from './app.module.css';
 
 export const App = () => {
+  // const [isLoading, setLoading] = useState(false);
+  // const [newIngredients, setIngredients] = useState(null);
+
+  // useEffect(() => {
+  //   console.log('7. useEffect ВЫЗВАН!');
+  //   async function fetchData() {
+  //     try {
+  //       setLoading(true);
+  //       const data = await getIngredients();
+  //       setIngredients(data);
+  //     } catch (err) {
+  //       console.error('Ошибка загрузки:', err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   }
+
+  //   fetchData();
+
+  // }, []);
+
+  // console.log('new_ingredients',newIngredients)
+
   return (
     <div className={styles.app}>
       <AppHeader />
@@ -16,6 +39,7 @@ export const App = () => {
         <BurgerIngredients ingredients={ingredients} />
         <BurgerConstructor ingredients={ingredients} />
       </main>
+      <div id="react-modals"></div>
     </div>
   );
 };

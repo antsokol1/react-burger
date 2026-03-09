@@ -1,0 +1,23 @@
+.order_details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.order {
+  margin-top: 36px;
+  margin-bottom: 32px;
+  text-shadow: 0 0 32px rgb(51 51 255 / 50%);
+}
+
+.check_image {
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
+.description_add {
+  margin-top: 8px;
+  margin-bottom: 120px;
+  color: rgb(133 133 173 / 100%);
+}

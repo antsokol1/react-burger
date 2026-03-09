@@ -5,3 +5,37 @@
   padding-bottom: 20px;
   color: var(--text-primary-color);
 }
+
+.bun_top {
+  margin-bottom: 16px;
+}
+
+.scrollable_elements {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+}
+
+.bun_bottom {
+  margin-top: 16px;
+}
+
+.button_group {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 40px;
+  margin-right: 16px;
+  margin-bottom: 52px;
+  text-align: center;
+}
+
+.button_group_price {
+  margin-right: 8px;
+}
+
+.button_group_icon {
+  margin-right: 40px;
+}
