@@ -37,7 +37,7 @@ export const BurgerIngredients = ({ ingredients }) => {
   }
 
   function closeIngredientDetails() {
-    setSelectedIngredient(null); // Возвращаем null, а не false
+    setSelectedIngredient(null);
   }
 
   useEffect(() => {
