@@ -8,7 +8,7 @@ export const IngredientCard = ({ ingredient, onClick }) => {
       {ingredient.name === 'Краторная булка N-200i' && (
         <Counter count={1} size="default" />
       )}
-      <img src={ingredient.image} />
+      <img src={ingredient.image} alt={ingredient.name} />
       <div className={styles.price}>
         <p className="text text_type_digits-default">{ingredient.price}</p>
         <CurrencyIcon type="primary" />

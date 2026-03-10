@@ -3,9 +3,11 @@ import {
   CurrencyIcon,
   Button,
   Preloader,
+  DragIcon,
 } from '@krgaa/react-developer-burger-ui-components';
 import { useState } from 'react';
 
+import { Modal } from '@/components/modal/modal';
 import { OrderDetails } from '@/components/order-details/order-details';
 
 import styles from './burger-constructor.module.css';
@@ -58,7 +60,8 @@ export const BurgerConstructor = ({ ingredients, isLoading }) => {
 
       <section className={`${styles.scrollable_elements} custom-scroll`}>
         {someIngredients.map((ingredient) => (
-          <section key={ingredient._id}>
+          <section key={ingredient._id} className={styles.constructor_element}>
+            <DragIcon className={styles.drag_icon} />
             <ConstructorElement
               handleClose={undefined}
               isLocked={false}
@@ -90,10 +93,9 @@ export const BurgerConstructor = ({ ingredients, isLoading }) => {
         </Button>
 
         {isOrderDetails && (
-          <OrderDetails
-            title={'Заказ оформлен'}
-            onClose={() => setOrderDetails(false)}
-          ></OrderDetails>
+          <Modal title={'Заказ оформлен'} onClose={() => setOrderDetails(false)}>
+            <OrderDetails order={'034536'} />
+          </Modal>
         )}
       </section>
     </section>

@@ -25,7 +25,7 @@ export function Modal({ children, title, onClose }) {
 
   return ReactDOM.createPortal(
     <>
-      <ModalOverlay onClose={onClose}></ModalOverlay>
+      <ModalOverlay onClose={onClose} />
       <div className={styles.modal}>
         <div className={styles.modal_header}>
           <p className="text text_type_main-medium">{title}</p>

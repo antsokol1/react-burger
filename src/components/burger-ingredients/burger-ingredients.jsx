@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from 'react';
 
 import { IngredientCard } from '@/components/ingredient-card/ingredient-card';
 import { IngredientDetails } from '@/components/ingredient-details/ingredient-details';
+import { Modal } from '@/components/modal/modal';
 
 import styles from './burger-ingredients.module.css';
 
@@ -72,10 +73,6 @@ export const BurgerIngredients = ({ ingredients, isLoading }) => {
 
   function handleIngredientCard(ingredient) {
     setSelectedIngredient(ingredient);
-  }
-
-  function closeIngredientDetails() {
-    setSelectedIngredient(null);
   }
 
   return (
@@ -149,11 +146,9 @@ export const BurgerIngredients = ({ ingredients, isLoading }) => {
       </section>
 
       {selectedIngredient && (
-        <IngredientDetails
-          title={'Детали ингредиента'}
-          ingredient={selectedIngredient}
-          onClose={closeIngredientDetails}
-        ></IngredientDetails>
+        <Modal title={'Детали ингредиента'} onClose={() => setSelectedIngredient(null)}>
+          <IngredientDetails ingredient={selectedIngredient} />
+        </Modal>
       )}
     </section>
   );

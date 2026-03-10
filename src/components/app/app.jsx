@@ -40,7 +40,6 @@ export const App = () => {
         <BurgerIngredients ingredients={ingredients} isLoading={isLoading} />
         <BurgerConstructor ingredients={ingredients} isLoading={isLoading} />
       </main>
-      <div id="react-modals"></div>
     </div>
   );
 };

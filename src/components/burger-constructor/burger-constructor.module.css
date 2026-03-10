@@ -2,12 +2,14 @@
   display: flex;
   flex-direction: column;
   width: 600px;
+  margin-left: 40px;
   padding-bottom: 20px;
   color: var(--text-primary-color);
 }
 
 .bun_top {
   margin-bottom: 16px;
+  margin-left: 32px;
 }
 
 .scrollable_elements {
@@ -17,8 +19,28 @@
   overflow-y: auto;
 }
 
+.constructor_element {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.drag_icon {
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
 .bun_bottom {
   margin-top: 16px;
+  margin-left: 32px;
 }
 
 .button_group {
