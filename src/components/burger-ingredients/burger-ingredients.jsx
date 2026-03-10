@@ -1,4 +1,4 @@
-import { Tab } from '@krgaa/react-developer-burger-ui-components';
+import { Tab, Preloader } from '@krgaa/react-developer-burger-ui-components';
 import { useRef, useState, useEffect } from 'react';
 
 import { IngredientCard } from '@/components/ingredient-card/ingredient-card';
@@ -6,16 +6,9 @@ import { IngredientDetails } from '@/components/ingredient-details/ingredient-de
 
 import styles from './burger-ingredients.module.css';
 
-export const BurgerIngredients = ({ ingredients }) => {
+export const BurgerIngredients = ({ ingredients, isLoading }) => {
   const [tabValue, setTabValue] = useState('bun');
-
   const [selectedIngredient, setSelectedIngredient] = useState(null);
-
-  const groupedIngredients = {
-    bun: ingredients.filter((item) => item.type === 'bun'),
-    main: ingredients.filter((item) => item.type === 'main'),
-    sauce: ingredients.filter((item) => item.type === 'sauce'),
-  };
 
   const bunRef = useRef(null);
   const mainRef = useRef(null);
@@ -26,19 +19,6 @@ export const BurgerIngredients = ({ ingredients }) => {
     main: mainRef,
     sauce: sauceRef,
   };
-
-  function handleTab(value) {
-    setTabValue(value);
-    refs[value].current?.scrollIntoView({ behavior: 'smooth' });
-  }
-
-  function handleIngredientCard(ingredient) {
-    setSelectedIngredient(ingredient);
-  }
-
-  function closeIngredientDetails() {
-    setSelectedIngredient(null);
-  }
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -70,6 +50,33 @@ export const BurgerIngredients = ({ ingredients }) => {
       observer.disconnect();
     };
   }, []);
+
+  if (isLoading || !ingredients) {
+    return (
+      <section className={styles.burger_ingredients}>
+        <Preloader />
+      </section>
+    );
+  }
+
+  const groupedIngredients = {
+    bun: ingredients.filter((item) => item.type === 'bun'),
+    main: ingredients.filter((item) => item.type === 'main'),
+    sauce: ingredients.filter((item) => item.type === 'sauce'),
+  };
+
+  function handleTab(value) {
+    setTabValue(value);
+    refs[value].current?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function handleIngredientCard(ingredient) {
+    setSelectedIngredient(ingredient);
+  }
+
+  function closeIngredientDetails() {
+    setSelectedIngredient(null);
+  }
 
   return (
     <section className={styles.burger_ingredients}>

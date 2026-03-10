@@ -2,6 +2,7 @@ import {
   ConstructorElement,
   CurrencyIcon,
   Button,
+  Preloader,
 } from '@krgaa/react-developer-burger-ui-components';
 import { useState } from 'react';
 
@@ -9,11 +10,16 @@ import { OrderDetails } from '@/components/order-details/order-details';
 
 import styles from './burger-constructor.module.css';
 
-export const BurgerConstructor = ({ ingredients }) => {
+export const BurgerConstructor = ({ ingredients, isLoading }) => {
   const [isOrderDetails, setOrderDetails] = useState(false);
 
-  function handleCreate() {
-    setOrderDetails(true);
+  if (isLoading || !ingredients) {
+    return (
+      <section className={styles.burger_constructor}>
+        <p className="text text_type_main-medium mb-6">Корзина</p>
+        <Preloader />
+      </section>
+    );
   }
 
   const bun = {
@@ -31,25 +37,11 @@ export const BurgerConstructor = ({ ingredients }) => {
     __v: 0,
   };
 
-  console.log(bun);
+  const someIngredients = ingredients.filter((item) => item.type !== 'bun');
 
-  const someIngredientsIds = [
-    '60666c42cc7b410027a1a9b9',
-    '60666c42cc7b410027a1a9b4',
-    '60666c42cc7b410027a1a9bc',
-    '60666c42cc7b410027a1a9bb',
-    '60666c42cc7b410027a1a9bb',
-  ];
-
-  const customIngredients = ingredients.filter((ingredient) =>
-    someIngredientsIds.includes(ingredient._id)
-  );
-
-  customIngredients.push(
-    ingredients.find((ingredient) => ingredient._id === '60666c42cc7b410027a1a9bb')
-  );
-
-  console.log(customIngredients);
+  function handleCreate() {
+    setOrderDetails(true);
+  }
 
   return (
     <section className={styles.burger_constructor}>
@@ -65,7 +57,7 @@ export const BurgerConstructor = ({ ingredients }) => {
       </section>
 
       <section className={`${styles.scrollable_elements} custom-scroll`}>
-        {customIngredients.map((ingredient) => (
+        {someIngredients.map((ingredient) => (
           <section key={ingredient._id}>
             <ConstructorElement
               handleClose={undefined}
