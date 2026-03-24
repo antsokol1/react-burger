@@ -13,3 +13,25 @@
   text-align: center;
   list-style-type: none;
 }
+
+.all_ingredients {
+  width: 100%;
+  height: 100vh;
+  margin-top: 40px;
+  margin-bottom: 60px;
+  overflow-y: auto;
+}
+
+.ingredient_kind {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.ingredients_grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px 24px;
+  padding-left: 0;
+  list-style-type: none;
+}

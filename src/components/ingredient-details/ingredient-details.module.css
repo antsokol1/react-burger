@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.image {
+  width: 480px;
+  height: 240px;
+  margin-bottom: 16px;
+}
+
+.food_description {
+  display: flex;
+  gap: 50px;
+  margin-top: 32px;
+  margin-bottom: 60px;
+}
+
+.kind_description {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: rgb(133 133 173 / 100%);
+  text-align: center;
+}
