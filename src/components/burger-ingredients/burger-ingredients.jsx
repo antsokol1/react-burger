@@ -5,9 +5,12 @@ import { IngredientCard } from '@/components/ingredient-card/ingredient-card';
 import { IngredientDetails } from '@/components/ingredient-details/ingredient-details';
 import { Modal } from '@/components/modal/modal';
 
+import { useGetIngredientsQuery } from '../services/ingredients/api';
+
 import styles from './burger-ingredients.module.css';
 
-export const BurgerIngredients = ({ ingredients, isLoading }) => {
+export const BurgerIngredients = () => {
+  const { isLoading, data: ingredients } = useGetIngredientsQuery();
   const [tabValue, setTabValue] = useState('bun');
   const [selectedIngredient, setSelectedIngredient] = useState(null);
 
@@ -50,7 +53,7 @@ export const BurgerIngredients = ({ ingredients, isLoading }) => {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [ingredients]);
 
   if (isLoading || !ingredients) {
     return (

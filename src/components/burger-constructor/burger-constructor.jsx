@@ -10,9 +10,12 @@ import { useState } from 'react';
 import { Modal } from '@/components/modal/modal';
 import { OrderDetails } from '@/components/order-details/order-details';
 
+import { useGetIngredientsQuery } from '../services/ingredients/api';
+
 import styles from './burger-constructor.module.css';
 
-export const BurgerConstructor = ({ ingredients, isLoading }) => {
+export const BurgerConstructor = () => {
+  const { isLoading, data: ingredients } = useGetIngredientsQuery();
   const [isOrderDetails, setOrderDetails] = useState(false);
 
   if (isLoading || !ingredients) {
