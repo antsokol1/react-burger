@@ -1,9 +1,11 @@
 import styles from './order-details.module.css';
 
-export function OrderDetails({ order }) {
+export function OrderDetails({ orderData }) {
   return (
     <section className={styles.order_details}>
-      <p className={`${styles.order} text text_type_digits-large`}>{order}</p>
+      <p className={`${styles.order} text text_type_digits-large`}>
+        {orderData.order.number}
+      </p>
       <p className="text text_type_main-default">идентификатор заказа</p>
       <img
         src="../src/assets/images/done.png"

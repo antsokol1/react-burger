@@ -1,13 +1,35 @@
 import { CurrencyIcon, Counter } from '@krgaa/react-developer-burger-ui-components';
+import { useDrag } from 'react-dnd';
+import { useSelector } from 'react-redux';
+
+import { selectCount } from '../services/ingredients/burgerSlice';
 
 import styles from './ingredient-card.module.css';
 
 export const IngredientCard = ({ ingredient, onClick }) => {
+  const countMap = useSelector(selectCount);
+
+  console.log(countMap);
+
+  const counter = countMap[ingredient._id] || 0;
+
+  const type = ingredient.type === 'bun' ? 'bun' : 'ingredient';
+
+  const [{ isDragging }, dragRef] = useDrag({
+    type: type,
+    item: { ingredient },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
   return (
-    <article className={styles.ingredient_card} onClick={() => onClick(ingredient)}>
-      {ingredient.name === 'Краторная булка N-200i' && (
-        <Counter count={1} size="default" />
-      )}
+    <article
+      ref={dragRef}
+      className={`${styles.ingredient_card} ${isDragging ? styles.dragging : ''}`}
+      onClick={() => onClick(ingredient)}
+    >
+      {counter > 0 && <Counter count={counter} size="default" />}
       <img src={ingredient.image} alt={ingredient.name} />
       <div className={styles.price}>
         <p className="text text_type_digits-default">{ingredient.price}</p>

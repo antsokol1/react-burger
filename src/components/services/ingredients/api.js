@@ -12,7 +12,16 @@ export const ingredientsApi = createApi({
       query: () => '/api/ingredients',
       transformResponse: (response) => response.data,
     }),
+    createOrder: builder.mutation({
+      query: (ingredients) => ({
+        url: '/api/orders',
+        method: 'POST',
+        body: {
+          ingredients: ingredients,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetIngredientsQuery } = ingredientsApi;
+export const { useGetIngredientsQuery, useCreateOrderMutation } = ingredientsApi;
