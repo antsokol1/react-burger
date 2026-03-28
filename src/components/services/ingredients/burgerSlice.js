@@ -12,12 +12,16 @@ const burgerSlice = createSlice({
     addBun: (state, action) => {
       state.bun = action.payload;
     },
-    addIngredient: (state, action) => {
-      const ingredient = action.payload;
-      state.ingredients.push({
-        ...ingredient,
-        customId: nanoid(),
-      });
+    addIngredient: {
+      prepare: (ingredient) => ({
+        payload: {
+          ...ingredient,
+          customId: nanoid(), // nanoid() здесь — OK, это не редьюсер
+        },
+      }),
+      reducer: (state, action) => {
+        state.ingredients.push(action.payload);
+      },
     },
     deleteIngredient: (state, action) => {
       const customId = action.payload;
@@ -34,11 +38,20 @@ const burgerSlice = createSlice({
       const [draggedItem] = state.ingredients.splice(dragIndex, 1);
       state.ingredients.splice(hoverIndex, 0, draggedItem);
     },
+    clearConstructor: (state) => {
+      state.bun = null;
+      state.ingredients = [];
+    },
   },
 });
 
-export const { addBun, addIngredient, deleteIngredient, moveIngredient } =
-  burgerSlice.actions;
+export const {
+  addBun,
+  addIngredient,
+  deleteIngredient,
+  moveIngredient,
+  clearConstructor,
+} = burgerSlice.actions;
 export default burgerSlice.reducer;
 
 export const selectBun = (state) => state.burger.bun;

@@ -22,6 +22,7 @@ import {
   addBun,
   moveIngredient,
   selectPrice,
+  clearConstructor,
 } from '../services/ingredients/burgerSlice';
 
 import styles from './burger-constructor.module.css';
@@ -136,9 +137,14 @@ export const BurgerConstructor = () => {
   // const orderIngredients = [bun._id, ...someIngredients.map(item => item._id), bun._id];
 
   async function handleCreate() {
-    const result = await createOrder(orderIngredients);
-    if (result) {
-      setOrderDetails(true);
+    try {
+      const result = await createOrder(orderIngredients);
+      if (result) {
+        dispatch(clearConstructor);
+        setOrderDetails(true);
+      }
+    } catch (error) {
+      console.error('Ошибка создания заказа:', error);
     }
   }
 
