@@ -1,15 +1,25 @@
 import { Tab, Preloader } from '@krgaa/react-developer-burger-ui-components';
 import { useRef, useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { IngredientCard } from '@/components/ingredient-card/ingredient-card';
 import { IngredientDetails } from '@/components/ingredient-details/ingredient-details';
 import { Modal } from '@/components/modal/modal';
 
+import { useGetIngredientsQuery } from '../services/ingredients/api';
+import {
+  selectIngredient,
+  clearIngredient,
+} from '../services/ingredients/selectedSlice';
+
 import styles from './burger-ingredients.module.css';
 
-export const BurgerIngredients = ({ ingredients, isLoading }) => {
+export const BurgerIngredients = () => {
+  const dispatch = useDispatch();
+  const { isLoading, data: ingredients } = useGetIngredientsQuery();
   const [tabValue, setTabValue] = useState('bun');
-  const [selectedIngredient, setSelectedIngredient] = useState(null);
+  // const [selectedIngredient, setSelectedIngredient] = useState(null);
+  const selectedIngredient = useSelector((state) => state.selected.ingredient);
 
   const bunRef = useRef(null);
   const mainRef = useRef(null);
@@ -50,7 +60,7 @@ export const BurgerIngredients = ({ ingredients, isLoading }) => {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [ingredients]);
 
   if (isLoading || !ingredients) {
     return (
@@ -72,7 +82,7 @@ export const BurgerIngredients = ({ ingredients, isLoading }) => {
   }
 
   function handleIngredientCard(ingredient) {
-    setSelectedIngredient(ingredient);
+    dispatch(selectIngredient(ingredient));
   }
 
   return (
@@ -146,8 +156,8 @@ export const BurgerIngredients = ({ ingredients, isLoading }) => {
       </section>
 
       {selectedIngredient && (
-        <Modal title={'Детали ингредиента'} onClose={() => setSelectedIngredient(null)}>
-          <IngredientDetails ingredient={selectedIngredient} />
+        <Modal title={'Детали ингредиента'} onClose={() => dispatch(clearIngredient())}>
+          <IngredientDetails />
         </Modal>
       )}
     </section>

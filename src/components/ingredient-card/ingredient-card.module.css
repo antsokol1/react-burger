@@ -10,3 +10,7 @@
   margin: 4px;
   text-align: center;
 }
+
+.dragging {
+  opacity: 0.2;
+}
