@@ -1,9 +1,14 @@
+import { Preloader } from '@krgaa/react-developer-burger-ui-components';
 import { useSelector } from 'react-redux';
 
 import styles from './ingredient-details.module.css';
 
 export function IngredientDetails() {
   const ingredient = useSelector((state) => state.selected.ingredient);
+
+  if (!ingredient) {
+    return <Preloader />;
+  }
 
   return (
     <section className={styles.container}>

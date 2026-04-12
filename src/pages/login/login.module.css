@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.first_item {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.second_item {
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+}
+
+.link {
+  margin-left: 5px;
+  color: rgb(76 76 255 / 100%);
+  text-decoration: none;
+}

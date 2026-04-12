@@ -1,25 +1,28 @@
 import { Tab, Preloader } from '@krgaa/react-developer-burger-ui-components';
 import { useRef, useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import { IngredientCard } from '@/components/ingredient-card/ingredient-card';
-import { IngredientDetails } from '@/components/ingredient-details/ingredient-details';
-import { Modal } from '@/components/modal/modal';
+// import { IngredientDetails } from '@/components/ingredient-details/ingredient-details';
+// import { Modal } from '@/components/modal/modal';
 
 import { useGetIngredientsQuery } from '../services/ingredients/api';
-import {
-  selectIngredient,
-  clearIngredient,
-} from '../services/ingredients/selectedSlice';
+import { selectIngredient } from '../services/ingredients/selectedSlice';
 
 import styles from './burger-ingredients.module.css';
 
 export const BurgerIngredients = () => {
   const dispatch = useDispatch();
   const { isLoading, data: ingredients } = useGetIngredientsQuery();
+
   const [tabValue, setTabValue] = useState('bun');
+
   // const [selectedIngredient, setSelectedIngredient] = useState(null);
-  const selectedIngredient = useSelector((state) => state.selected.ingredient);
+  // const selectedIngredient = useSelector((state) => state.selected.ingredient);
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const bunRef = useRef(null);
   const mainRef = useRef(null);
@@ -83,6 +86,9 @@ export const BurgerIngredients = () => {
 
   function handleIngredientCard(ingredient) {
     dispatch(selectIngredient(ingredient));
+    navigate(`/ingredient/${ingredient._id}`, {
+      state: { isModal: true, background: location },
+    });
   }
 
   return (
@@ -155,11 +161,11 @@ export const BurgerIngredients = () => {
         </section>
       </section>
 
-      {selectedIngredient && (
+      {/* {selectedIngredient && (
         <Modal title={'Детали ингредиента'} onClose={() => dispatch(clearIngredient())}>
           <IngredientDetails />
         </Modal>
-      )}
+      )} */}
     </section>
   );
 };

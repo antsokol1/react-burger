@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  gap: 60px;
+  margin-top: 120px;
+}
+
+.first_item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.second_item {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.link {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  color: #8585ad;
+  text-decoration: none;
+}
+
+.active {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  color: #f2f2f3;
+  text-decoration: none;
+}
+
+.section_p {
+  margin-top: 68px;
+}
+
+.custom_p {
+  color: #8585ad;
+}
