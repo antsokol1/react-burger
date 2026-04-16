@@ -26,7 +26,7 @@ export const Registration = () => {
     });
   }
 
-  async function handleClick(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     try {
       const result = await register(userData);
@@ -40,7 +40,7 @@ export const Registration = () => {
 
   return (
     <section className={styles.container}>
-      <section className={styles.first_item}>
+      <form className={styles.first_item} onSubmit={handleSubmit}>
         <h1 className="text text_type_main-medium">Регистрация</h1>
         <Input
           placeholder="Имя"
@@ -64,10 +64,10 @@ export const Registration = () => {
           value={userData?.password || ''}
           onChange={(event) => handleChange('password', event.target.value)}
         />
-        <Button size="large" type="primary" onClick={handleClick} disabled={isLoading}>
+        <Button size="large" type="primary" htmlType="submit" disabled={isLoading}>
           Зарегистрироваться
         </Button>
-      </section>
+      </form>
       <section className={styles.second_item}>
         <p className="text text_type_main-small">Уже зарегистрированы?</p>
         <Link to="/login" className={`${styles.link} text text_type_main-small`}>

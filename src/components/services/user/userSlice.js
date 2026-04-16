@@ -4,7 +4,6 @@ import { userApi } from './api';
 
 const initialState = {
   user: null,
-  isLogin: false,
   isAuthChecked: false,
 };
 
@@ -31,11 +30,9 @@ const userSlice = createSlice({
     },
     setUser: (state, action) => {
       state.user = action.payload;
-      state.isLogin = true;
     },
     clearUser: (state) => {
       state.user = null;
-      state.isLogin = false;
       state.isAuthChecked = true;
     },
   },
@@ -46,6 +43,5 @@ export const { setUser, clearUser, setIsAuthChecked } = userSlice.actions;
 // Селекторы
 export const selectIsAuthChecked = (state) => state.user.isAuthChecked;
 export const selectUser = (state) => state?.user?.user;
-export const selectIsLogin = (state) => state.user.isLogin;
 
 export default userSlice.reducer;

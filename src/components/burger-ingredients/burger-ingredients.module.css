@@ -35,3 +35,8 @@
   padding-left: 0;
   list-style-type: none;
 }
+
+.link {
+  color: inherit;
+  text-decoration: none;
+}

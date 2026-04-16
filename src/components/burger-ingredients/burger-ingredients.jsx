@@ -1,7 +1,7 @@
 import { Tab, Preloader } from '@krgaa/react-developer-burger-ui-components';
 import { useRef, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 
 import { IngredientCard } from '@/components/ingredient-card/ingredient-card';
 // import { IngredientDetails } from '@/components/ingredient-details/ingredient-details';
@@ -18,10 +18,6 @@ export const BurgerIngredients = () => {
 
   const [tabValue, setTabValue] = useState('bun');
 
-  // const [selectedIngredient, setSelectedIngredient] = useState(null);
-  // const selectedIngredient = useSelector((state) => state.selected.ingredient);
-
-  const navigate = useNavigate();
   const location = useLocation();
 
   const bunRef = useRef(null);
@@ -84,12 +80,12 @@ export const BurgerIngredients = () => {
     refs[value].current?.scrollIntoView({ behavior: 'smooth' });
   }
 
-  function handleIngredientCard(ingredient) {
-    dispatch(selectIngredient(ingredient));
-    navigate(`/ingredient/${ingredient._id}`, {
-      state: { isModal: true, background: location },
-    });
-  }
+  // function handleIngredientCard(ingredient) {
+  //   dispatch(selectIngredient(ingredient));
+  //   navigate(`/ingredient/${ingredient._id}`, {
+  //     state: { backgroundLocation: location }
+  //   });
+  // }
 
   return (
     <section className={styles.burger_ingredients}>
@@ -121,10 +117,14 @@ export const BurgerIngredients = () => {
           <ul className={styles.ingredients_grid}>
             {groupedIngredients.bun.map((ingredient) => (
               <li key={ingredient._id}>
-                <IngredientCard
-                  ingredient={ingredient}
-                  onClick={() => handleIngredientCard(ingredient)}
-                />
+                <Link
+                  to={`/ingredient/${ingredient._id}`}
+                  state={{ backgroundLocation: location }}
+                  className={styles.link}
+                  onClick={() => dispatch(selectIngredient(ingredient))}
+                >
+                  <IngredientCard ingredient={ingredient} />
+                </Link>
               </li>
             ))}
           </ul>
@@ -137,10 +137,14 @@ export const BurgerIngredients = () => {
           <ul className={styles.ingredients_grid}>
             {groupedIngredients.main.map((ingredient) => (
               <li key={ingredient._id}>
-                <IngredientCard
-                  ingredient={ingredient}
-                  onClick={() => handleIngredientCard(ingredient)}
-                />
+                <Link
+                  to={`/ingredient/${ingredient._id}`}
+                  state={{ backgroundLocation: location }}
+                  className={styles.link}
+                  onClick={() => dispatch(selectIngredient(ingredient))}
+                >
+                  <IngredientCard ingredient={ingredient} />
+                </Link>
               </li>
             ))}
           </ul>
@@ -151,10 +155,14 @@ export const BurgerIngredients = () => {
           <ul className={styles.ingredients_grid}>
             {groupedIngredients.sauce.map((ingredient) => (
               <li key={ingredient._id}>
-                <IngredientCard
-                  ingredient={ingredient}
-                  onClick={() => handleIngredientCard(ingredient)}
-                />
+                <Link
+                  to={`/ingredient/${ingredient._id}`}
+                  state={{ backgroundLocation: location }}
+                  className={styles.link}
+                  onClick={() => dispatch(selectIngredient(ingredient))}
+                >
+                  <IngredientCard ingredient={ingredient} />
+                </Link>
               </li>
             ))}
           </ul>

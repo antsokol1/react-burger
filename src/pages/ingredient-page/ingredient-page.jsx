@@ -11,7 +11,8 @@ import styles from './ingredient-page.module.css';
 export const IngredientPage = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const { isLoading, data: ingredients } = useGetIngredientsQuery();
+  const { isLoading, data: ingredientsData } = useGetIngredientsQuery();
+  const ingredients = ingredientsData?.data || [];
 
   useEffect(() => {
     if (!isLoading && ingredients.length > 0 && id) {
@@ -20,7 +21,11 @@ export const IngredientPage = () => {
         dispatch(selectIngredient(ingredient));
       }
     }
-  }, [id, ingredients]);
+  }, [id, ingredients, isLoading, dispatch]);
+
+  if (isLoading) {
+    return <div>Загрузка...</div>;
+  }
 
   return (
     <section className={styles.container}>

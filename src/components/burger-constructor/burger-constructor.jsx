@@ -4,10 +4,12 @@ import {
   Button,
   Preloader,
   DragIcon,
+  Loader,
 } from '@krgaa/react-developer-burger-ui-components';
 import { useState, useRef } from 'react';
 import { useDrop, useDrag } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import { Modal } from '@/components/modal/modal';
 import { OrderDetails } from '@/components/order-details/order-details';
@@ -86,9 +88,11 @@ const DraggableIngredient = ({ ingredient, index, dispatch }) => {
 
 export const BurgerConstructor = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { isLoading, data: ingredients } = useGetIngredientsQuery();
-  const [createOrder, { data: orderData }] = useCreateOrderMutation();
+  const [createOrder, { data: orderData, isLoading: isOrderLoading }] =
+    useCreateOrderMutation();
 
   const bun = useSelector((state) => state.burger.bun);
   const burgerIngredients = useSelector((state) => state.burger.ingredients);
@@ -130,22 +134,26 @@ export const BurgerConstructor = () => {
     ? [bun._id, ...burgerIngredients.map((item) => item._id), bun._id]
     : [];
 
-  // const bun = ingredients.find(item => item.type === 'bun');
-
-  // const someIngredients = ingredients.filter(item => item.type !== 'bun');
-
-  // const orderIngredients = [bun._id, ...someIngredients.map(item => item._id), bun._id];
-
   async function handleCreate() {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      navigate('/login', { state: { from: '/' } });
+      return;
+    }
+
     try {
-      const result = await createOrder(orderIngredients);
+      const result = await createOrder(orderIngredients).unwrap();
       if (result) {
-        dispatch(clearConstructor);
         setOrderDetails(true);
       }
     } catch (error) {
       console.error('Ошибка создания заказа:', error);
     }
+  }
+
+  function handleClose() {
+    setOrderDetails(false);
+    dispatch(clearConstructor());
   }
 
   if (orderIngredients.length === 0) {
@@ -183,7 +191,7 @@ export const BurgerConstructor = () => {
             0
           </p>
           <CurrencyIcon type="primary" className={styles.button_group_icon} />
-          <Button size="large" type="primary">
+          <Button size="large" type="primary" disabled>
             Оформить заказ
           </Button>
         </section>
@@ -251,8 +259,8 @@ export const BurgerConstructor = () => {
         </Button>
 
         {isOrderDetails && (
-          <Modal title={'Заказ оформлен'} onClose={() => setOrderDetails(false)}>
-            <OrderDetails orderData={orderData} />
+          <Modal title={'Заказ оформлен'} onClose={handleClose}>
+            {isOrderLoading ? <Loader /> : <OrderDetails orderData={orderData} />}
           </Modal>
         )}
       </section>

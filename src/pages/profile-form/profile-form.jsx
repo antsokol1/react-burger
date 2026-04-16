@@ -56,7 +56,8 @@ export const ProfileForm = () => {
     }
   }
 
-  async function handleSave() {
+  async function handleSubmit(event) {
+    event.preventDefault();
     try {
       const result = await updateUser(userData).unwrap();
       if (result) {
@@ -68,7 +69,7 @@ export const ProfileForm = () => {
   }
 
   return (
-    <>
+    <form onSubmit={handleSubmit}>
       <Input
         isIcon
         icon="EditIcon"
@@ -98,9 +99,9 @@ export const ProfileForm = () => {
           <Button type="secondary" onClick={handleCancel}>
             Отменить
           </Button>
-          <Button onClick={handleSave}>Сохранить</Button>
+          <Button htmlType="submit">Сохранить</Button>
         </section>
       )}
-    </>
+    </form>
   );
 };

@@ -10,12 +10,10 @@ import { Login } from '@/pages/login/login';
 import { NotFound } from '@/pages/not-found/not-found';
 import { ProfileOrder } from '@/pages/profile-order/profile-order';
 import { Profile } from '@/pages/profile/profile';
-// import { BurgerConstructor } from '@components/burger-constructor/burger-constructor';
-// import { BurgerIngredients } from '@components/burger-ingredients/burger-ingredients';
-// import { ingredients } from '@utils/ingredients';
-// import { getIngredients } from '@utils/api';
 import { Registration } from '@/pages/registration/registration';
 import { AppHeader } from '@components/app-header/app-header';
+import { IngredientDetails } from '@components/ingredient-details/ingredient-details';
+import { Modal } from '@components/modal/modal';
 import { ProtectedRoute } from '@components/protected-route';
 
 import { ProfileForm } from '../../pages/profile-form/profile-form';
@@ -24,27 +22,8 @@ import { checkUserAuth } from '../services/user/userSlice';
 import styles from './app.module.css';
 
 export const App = () => {
-  // const [isLoading, setLoading] = useState(false);
-  // const [ingredients, setIngredients] = useState(null);
-
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       setLoading(true);
-  //       const data = await getIngredients();
-  //       setIngredients(data);
-  //     } catch (e) {
-  //       console.error('Ошибка загрузки:', e);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   }
-
-  //   fetchData();
-  // }, []);
-
   const location = useLocation();
-  const isModal = location.state?.isModal;
+  const backgroundLocation = location.state?.backgroundLocation;
 
   const dispatch = useDispatch();
 
@@ -56,12 +35,10 @@ export const App = () => {
     <div className={styles.app}>
       <AppHeader />
       <main className={styles.main}>
-        <Routes>
+        {/* Основные маршруты */}
+        <Routes location={backgroundLocation || location}>
           <Route path="/" element={<Home />} />
-          <Route
-            path="/ingredient/:id"
-            element={isModal ? <Home /> : <IngredientPage />}
-          />
+          <Route path="/ingredient/:id" element={<IngredientPage />} />
           <Route path="/feed" element={<Feed />} />
 
           <Route
@@ -88,6 +65,20 @@ export const App = () => {
 
           <Route path="*" element={<NotFound />} />
         </Routes>
+
+        {/* Модальные окна поверх */}
+        {backgroundLocation && (
+          <Routes>
+            <Route
+              path="/ingredient/:id"
+              element={
+                <Modal onClose={() => window.history.back()}>
+                  <IngredientDetails />
+                </Modal>
+              }
+            />
+          </Routes>
+        )}
       </main>
     </div>
   );

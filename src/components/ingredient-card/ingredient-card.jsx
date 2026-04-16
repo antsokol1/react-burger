@@ -6,7 +6,7 @@ import { selectCount } from '../services/ingredients/burgerSlice';
 
 import styles from './ingredient-card.module.css';
 
-export const IngredientCard = ({ ingredient, onClick }) => {
+export const IngredientCard = ({ ingredient }) => {
   const countMap = useSelector(selectCount);
 
   console.log(countMap);
@@ -27,7 +27,6 @@ export const IngredientCard = ({ ingredient, onClick }) => {
     <article
       ref={dragRef}
       className={`${styles.ingredient_card} ${isDragging ? styles.dragging : ''}`}
-      onClick={() => onClick(ingredient)}
     >
       {counter > 0 && <Counter count={counter} size="default" />}
       <img src={ingredient.image} alt={ingredient.name} />
