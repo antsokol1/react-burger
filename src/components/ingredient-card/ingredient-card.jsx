@@ -9,8 +9,6 @@ import styles from './ingredient-card.module.css';
 export const IngredientCard = ({ ingredient }) => {
   const countMap = useSelector(selectCount);
 
-  console.log(countMap);
-
   const counter = countMap[ingredient._id] || 0;
 
   const type = ingredient.type === 'bun' ? 'bun' : 'ingredient';

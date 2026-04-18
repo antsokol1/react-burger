@@ -31,7 +31,6 @@ export const Forgot = () => {
         <Input
           placeholder="Укажите email"
           size="default"
-          s
           type="email"
           value={email}
           onChange={(event) => setEmail(event.currentTarget.value)}
@@ -98,7 +97,6 @@ export const Reset = () => {
           icon="ShowIcon"
           placeholder="Введите новый пароль"
           size="default"
-          s
           type="password"
           value={passwordForm.password}
           onChange={(event) => handleChange('password', event.target.value)}
@@ -106,7 +104,6 @@ export const Reset = () => {
         <Input
           placeholder="Введите код из письма"
           size="default"
-          s
           type="text"
           value={passwordForm.token}
           onChange={(event) => handleChange('token', event.target.value)}

@@ -69,9 +69,8 @@ export const ProfileForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className={styles.container}>
       <Input
-        isIcon
         icon="EditIcon"
         name="name"
         onChange={(event) => handleChange('name', event.target.value)}

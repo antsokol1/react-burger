@@ -4,7 +4,6 @@ import {
   Button,
   Preloader,
   DragIcon,
-  Loader,
 } from '@krgaa/react-developer-burger-ui-components';
 import { useState, useRef } from 'react';
 import { useDrop, useDrag } from 'react-dnd';
@@ -260,7 +259,7 @@ export const BurgerConstructor = () => {
 
         {isOrderDetails && (
           <Modal title={'Заказ оформлен'} onClose={handleClose}>
-            {isOrderLoading ? <Loader /> : <OrderDetails orderData={orderData} />}
+            {isOrderLoading ? <Preloader /> : <OrderDetails orderData={orderData} />}
           </Modal>
         )}
       </section>

@@ -4,8 +4,6 @@ import { useDispatch } from 'react-redux';
 import { useLocation, Link } from 'react-router-dom';
 
 import { IngredientCard } from '@/components/ingredient-card/ingredient-card';
-// import { IngredientDetails } from '@/components/ingredient-details/ingredient-details';
-// import { Modal } from '@/components/modal/modal';
 
 import { useGetIngredientsQuery } from '../services/ingredients/api';
 import { selectIngredient } from '../services/ingredients/selectedSlice';
@@ -168,12 +166,6 @@ export const BurgerIngredients = () => {
           </ul>
         </section>
       </section>
-
-      {/* {selectedIngredient && (
-        <Modal title={'Детали ингредиента'} onClose={() => dispatch(clearIngredient())}>
-          <IngredientDetails />
-        </Modal>
-      )} */}
     </section>
   );
 };
