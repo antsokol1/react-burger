@@ -95,7 +95,7 @@ export const ProfileForm = () => {
 
       {isEdited && (
         <section className={styles.button_container}>
-          <Button type="secondary" onClick={handleCancel}>
+          <Button type="secondary" htmlType="submit" onClick={handleCancel}>
             Отменить
           </Button>
           <Button htmlType="submit">Сохранить</Button>
