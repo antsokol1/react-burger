@@ -1,25 +1,22 @@
 import { Tab, Preloader } from '@krgaa/react-developer-burger-ui-components';
 import { useRef, useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useLocation, Link } from 'react-router-dom';
 
 import { IngredientCard } from '@/components/ingredient-card/ingredient-card';
-import { IngredientDetails } from '@/components/ingredient-details/ingredient-details';
-import { Modal } from '@/components/modal/modal';
 
 import { useGetIngredientsQuery } from '../services/ingredients/api';
-import {
-  selectIngredient,
-  clearIngredient,
-} from '../services/ingredients/selectedSlice';
+import { selectIngredient } from '../services/ingredients/selectedSlice';
 
 import styles from './burger-ingredients.module.css';
 
 export const BurgerIngredients = () => {
   const dispatch = useDispatch();
   const { isLoading, data: ingredients } = useGetIngredientsQuery();
+
   const [tabValue, setTabValue] = useState('bun');
-  // const [selectedIngredient, setSelectedIngredient] = useState(null);
-  const selectedIngredient = useSelector((state) => state.selected.ingredient);
+
+  const location = useLocation();
 
   const bunRef = useRef(null);
   const mainRef = useRef(null);
@@ -81,9 +78,12 @@ export const BurgerIngredients = () => {
     refs[value].current?.scrollIntoView({ behavior: 'smooth' });
   }
 
-  function handleIngredientCard(ingredient) {
-    dispatch(selectIngredient(ingredient));
-  }
+  // function handleIngredientCard(ingredient) {
+  //   dispatch(selectIngredient(ingredient));
+  //   navigate(`/ingredient/${ingredient._id}`, {
+  //     state: { backgroundLocation: location }
+  //   });
+  // }
 
   return (
     <section className={styles.burger_ingredients}>
@@ -115,10 +115,14 @@ export const BurgerIngredients = () => {
           <ul className={styles.ingredients_grid}>
             {groupedIngredients.bun.map((ingredient) => (
               <li key={ingredient._id}>
-                <IngredientCard
-                  ingredient={ingredient}
-                  onClick={() => handleIngredientCard(ingredient)}
-                />
+                <Link
+                  to={`/ingredient/${ingredient._id}`}
+                  state={{ backgroundLocation: location }}
+                  className={styles.link}
+                  onClick={() => dispatch(selectIngredient(ingredient))}
+                >
+                  <IngredientCard ingredient={ingredient} />
+                </Link>
               </li>
             ))}
           </ul>
@@ -131,10 +135,14 @@ export const BurgerIngredients = () => {
           <ul className={styles.ingredients_grid}>
             {groupedIngredients.main.map((ingredient) => (
               <li key={ingredient._id}>
-                <IngredientCard
-                  ingredient={ingredient}
-                  onClick={() => handleIngredientCard(ingredient)}
-                />
+                <Link
+                  to={`/ingredient/${ingredient._id}`}
+                  state={{ backgroundLocation: location }}
+                  className={styles.link}
+                  onClick={() => dispatch(selectIngredient(ingredient))}
+                >
+                  <IngredientCard ingredient={ingredient} />
+                </Link>
               </li>
             ))}
           </ul>
@@ -145,21 +153,19 @@ export const BurgerIngredients = () => {
           <ul className={styles.ingredients_grid}>
             {groupedIngredients.sauce.map((ingredient) => (
               <li key={ingredient._id}>
-                <IngredientCard
-                  ingredient={ingredient}
-                  onClick={() => handleIngredientCard(ingredient)}
-                />
+                <Link
+                  to={`/ingredient/${ingredient._id}`}
+                  state={{ backgroundLocation: location }}
+                  className={styles.link}
+                  onClick={() => dispatch(selectIngredient(ingredient))}
+                >
+                  <IngredientCard ingredient={ingredient} />
+                </Link>
               </li>
             ))}
           </ul>
         </section>
       </section>
-
-      {selectedIngredient && (
-        <Modal title={'Детали ингредиента'} onClose={() => dispatch(clearIngredient())}>
-          <IngredientDetails />
-        </Modal>
-      )}
     </section>
   );
 };

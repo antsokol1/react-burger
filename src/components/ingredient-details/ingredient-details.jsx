@@ -1,9 +1,24 @@
+import { Preloader } from '@krgaa/react-developer-burger-ui-components';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+
+import { useGetIngredientsQuery } from '../services/ingredients/api';
 
 import styles from './ingredient-details.module.css';
 
 export function IngredientDetails() {
-  const ingredient = useSelector((state) => state.selected.ingredient);
+  const { id } = useParams();
+  const { isLoading, data: ingredientsData } = useGetIngredientsQuery();
+  const ingredients = ingredientsData ? ingredientsData : [];
+
+  const reduxIngredient = useSelector((state) => state.selected?.ingredient);
+  const apiIngredient = ingredients.find((item) => item._id === id);
+
+  const ingredient = reduxIngredient || apiIngredient;
+
+  if (isLoading || !ingredient) {
+    return <Preloader />;
+  }
 
   return (
     <section className={styles.container}>
