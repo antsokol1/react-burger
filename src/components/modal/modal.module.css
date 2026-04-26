@@ -22,14 +22,3 @@
   align-items: center;
   margin: 40px;
 }
-
-/* .close_button {
-  cursor: pointer;
-  transition: all 0.3s ease;
-  &:hover {
-    transform: scale(1.1);
-  }
-  &:active {
-    transform: scale(0.95);
-  }
-} */

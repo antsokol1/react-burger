@@ -1,6 +1,16 @@
 import styles from './order-details.module.css';
 
-export function OrderDetails({ orderData }) {
+type OrderData = {
+  order: {
+    number: number;
+  };
+};
+
+type OrderDetailsProps = {
+  orderData: OrderData;
+};
+
+export function OrderDetails({ orderData }: OrderDetailsProps): React.JSX.Element {
   return (
     <section className={styles.order_details}>
       <p className={`${styles.order} text text_type_digits-large`}>

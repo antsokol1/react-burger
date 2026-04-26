@@ -19,13 +19,15 @@ import { ProtectedRoute } from '@components/protected-route';
 import { ProfileForm } from '../../pages/profile-form/profile-form';
 import { checkUserAuth } from '../services/user/userSlice';
 
+import type { AppDispatch } from '../services/store';
+
 import styles from './app.module.css';
 
-export const App = () => {
+export const App = (): React.JSX.Element => {
   const location = useLocation();
   const backgroundLocation = location.state?.backgroundLocation;
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
     dispatch(checkUserAuth());

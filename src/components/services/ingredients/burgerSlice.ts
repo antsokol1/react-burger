@@ -1,6 +1,28 @@
 import { createSlice, nanoid, createSelector } from '@reduxjs/toolkit';
 
-const initialState = {
+import type { PayloadAction } from '@reduxjs/toolkit';
+
+import type { RootState } from '../store';
+import type { Ingredient } from './api';
+
+// Тип для ингредиента в конструкторе (с customId)
+export type ConstructorIngredient = {
+  customId: string;
+} & Ingredient;
+
+// Тип для состояния
+type BurgerState = {
+  bun: Ingredient | null;
+  ingredients: ConstructorIngredient[];
+};
+
+// Тип для перемещения ингредиента
+type MoveState = {
+  dragId: string;
+  hoverId: string;
+};
+
+const initialState: BurgerState = {
   bun: null,
   ingredients: [],
 };
@@ -9,25 +31,25 @@ const burgerSlice = createSlice({
   name: 'burger',
   initialState,
   reducers: {
-    addBun: (state, action) => {
+    addBun: (state, action: PayloadAction<Ingredient>) => {
       state.bun = action.payload;
     },
     addIngredient: {
-      prepare: (ingredient) => ({
+      prepare: (ingredient: Ingredient) => ({
         payload: {
           ...ingredient,
-          customId: nanoid(), // nanoid() здесь — OK, это не редьюсер
+          customId: nanoid(),
         },
       }),
-      reducer: (state, action) => {
+      reducer: (state, action: PayloadAction<ConstructorIngredient>) => {
         state.ingredients.push(action.payload);
       },
     },
-    deleteIngredient: (state, action) => {
+    deleteIngredient: (state, action: PayloadAction<string>) => {
       const customId = action.payload;
       state.ingredients = state.ingredients.filter((item) => item.customId !== customId);
     },
-    moveIngredient: (state, action) => {
+    moveIngredient: (state, action: PayloadAction<MoveState>) => {
       const { dragId, hoverId } = action.payload;
 
       const dragIndex = state.ingredients.findIndex((item) => item.customId === dragId);
@@ -54,13 +76,14 @@ export const {
 } = burgerSlice.actions;
 export default burgerSlice.reducer;
 
-export const selectBun = (state) => state.burger.bun;
-export const selectIngredients = (state) => state.burger.ingredients;
+export const selectBun = (state: RootState): Ingredient | null => state.burger.bun;
+export const selectIngredients = (state: RootState): Ingredient[] =>
+  state.burger.ingredients;
 
 export const selectCount = createSelector(
   [selectBun, selectIngredients],
   (bun, ingredients) => {
-    const count = {};
+    const count: Record<string, number> = {};
 
     ingredients.forEach((item) => {
       const id = item._id;
@@ -88,7 +111,6 @@ export const selectPrice = createSelector(
     if (bun) {
       totalPrice += bun.price * 2;
     }
-    console.log(totalPrice);
     return totalPrice;
   }
 );

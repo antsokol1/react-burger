@@ -4,13 +4,21 @@ import ReactDOM from 'react-dom';
 
 import { ModalOverlay } from '@/components/modal-overlay/modal-overlay';
 
+import type { ReactNode } from 'react';
+
 import styles from './modal.module.css';
 
-export function Modal({ children, title, onClose }) {
+type TModalProps = {
+  children: ReactNode;
+  title?: string;
+  onClose: () => void;
+};
+
+export function Modal({ children, title, onClose }: TModalProps): React.ReactNode {
   const modalRoot = document.getElementById('react-modals');
 
   useEffect(() => {
-    const handleEsc = (event) => {
+    const handleEsc = (event: KeyboardEvent): void => {
       if (event.key === 'Escape') {
         onClose();
       }
@@ -18,10 +26,15 @@ export function Modal({ children, title, onClose }) {
 
     document.addEventListener('keydown', handleEsc);
 
-    return () => {
+    return (): void => {
       document.removeEventListener('keydown', handleEsc);
     };
   }, [onClose]);
+
+  if (!modalRoot) {
+    console.error('Элемент с id "react-modals" не найден');
+    return null;
+  }
 
   return ReactDOM.createPortal(
     <>

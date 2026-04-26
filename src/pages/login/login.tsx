@@ -6,26 +6,33 @@ import { Link } from 'react-router-dom';
 import { useLoginMutation } from '@/components/services/user/api';
 import { setUser } from '@/components/services/user/userSlice';
 
+import type { AppDispatch } from '@/components/services/store';
+
 import styles from './login.module.css';
 
-export const Login = () => {
-  const dispatch = useDispatch();
+type UserData = {
+  email: string;
+  password: string;
+};
 
-  const [userData, setUserData] = useState({
+export const Login = (): React.JSX.Element => {
+  const dispatch: AppDispatch = useDispatch();
+
+  const [userData, setUserData] = useState<UserData>({
     email: '',
     password: '',
   });
 
   const [login, { isLoading }] = useLoginMutation();
 
-  function handleChange(field, value) {
+  function handleChange(field: string, value: string): void {
     setUserData({
       ...userData,
       [field]: value,
     });
   }
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
     try {
       const result = await login(userData).unwrap();

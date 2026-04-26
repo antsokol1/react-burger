@@ -6,7 +6,7 @@ import { BurgerIngredients } from '@components/burger-ingredients/burger-ingredi
 
 import styles from './home.module.css';
 
-export const Home = () => {
+export const Home = (): React.JSX.Element => {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className={styles.container}>
