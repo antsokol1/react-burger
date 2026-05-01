@@ -4,9 +4,17 @@ import { useSelector } from 'react-redux';
 
 import { selectCount } from '../services/ingredients/burgerSlice';
 
+import type { Ingredient } from '../services/ingredients/api';
+
 import styles from './ingredient-card.module.css';
 
-export const IngredientCard = ({ ingredient }) => {
+type IngredientCardProps = {
+  ingredient: Ingredient;
+};
+
+export const IngredientCard = ({
+  ingredient,
+}: IngredientCardProps): React.JSX.Element => {
   const countMap = useSelector(selectCount);
 
   const counter = countMap[ingredient._id] || 0;
@@ -23,7 +31,7 @@ export const IngredientCard = ({ ingredient }) => {
 
   return (
     <article
-      ref={dragRef}
+      ref={dragRef as unknown as React.Ref<HTMLElement>}
       className={`${styles.ingredient_card} ${isDragging ? styles.dragging : ''}`}
     >
       {counter > 0 && <Counter count={counter} size="default" />}

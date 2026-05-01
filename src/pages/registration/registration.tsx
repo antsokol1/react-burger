@@ -6,12 +6,20 @@ import { Link } from 'react-router-dom';
 import { useRegisterMutation } from '@/components/services/user/api';
 import { setUser } from '@/components/services/user/userSlice';
 
+import type { AppDispatch } from '@/components/services/store';
+
 import styles from './registration.module.css';
 
-export const Registration = () => {
-  const dispatch = useDispatch();
+type UserData = {
+  name: string;
+  email: string;
+  password: string;
+};
 
-  const [userData, setUserData] = useState({
+export const Registration = (): React.JSX.Element => {
+  const dispatch: AppDispatch = useDispatch();
+
+  const [userData, setUserData] = useState<UserData>({
     name: '',
     email: '',
     password: '',
@@ -19,17 +27,17 @@ export const Registration = () => {
 
   const [register, { isLoading }] = useRegisterMutation();
 
-  function handleChange(field, value) {
+  function handleChange(field: string, value: string): void {
     setUserData({
       ...userData,
       [field]: value,
     });
   }
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
     try {
-      const result = await register(userData);
+      const result = await register(userData).unwrap();
       if (result) {
         dispatch(setUser(result));
       }

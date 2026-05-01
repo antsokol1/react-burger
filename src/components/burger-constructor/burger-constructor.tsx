@@ -6,7 +6,7 @@ import {
   DragIcon,
 } from '@krgaa/react-developer-burger-ui-components';
 import { useState, useRef } from 'react';
-import { useDrop, useDrag } from 'react-dnd';
+import { useDrop, useDrag, type DropTargetMonitor } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,13 +26,36 @@ import {
   clearConstructor,
 } from '../services/ingredients/burgerSlice';
 
+import type { Ingredient } from '../services/ingredients/api';
+import type { ConstructorIngredient } from '../services/ingredients/burgerSlice';
+import type { AppDispatch, RootState } from '../services/store';
+
 import styles from './burger-constructor.module.css';
 
-// Компонент для перетаскиваемого ингредиента
-const DraggableIngredient = ({ ingredient, index, dispatch }) => {
-  const sectionRef = useRef(null);
+type DraggableIngredientProps = {
+  ingredient: ConstructorIngredient;
+  index: number;
+  dispatch: AppDispatch;
+};
 
-  const [{ isDragging }, moveRef] = useDrag({
+type DragItem = {
+  customId: string;
+  index: number;
+};
+
+type DropItem = {
+  ingredient: Ingredient;
+};
+
+// Компонент для перетаскиваемого ингредиента
+const DraggableIngredient = ({
+  ingredient,
+  index,
+  dispatch,
+}: DraggableIngredientProps): React.JSX.Element => {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const [{ isDragging }, moveRef] = useDrag<DragItem, unknown, { isDragging: boolean }>({
     type: 'move',
     item: { customId: ingredient.customId, index },
     collect: (monitor) => ({
@@ -40,9 +63,9 @@ const DraggableIngredient = ({ ingredient, index, dispatch }) => {
     }),
   });
 
-  const [, drop] = useDrop({
+  const [, drop] = useDrop<DragItem, unknown, unknown>({
     accept: 'move',
-    hover: (item, monitor) => {
+    hover: (item: DragItem, monitor: DropTargetMonitor) => {
       if (!sectionRef.current) return;
       if (item.customId === ingredient.customId) return;
 
@@ -54,6 +77,7 @@ const DraggableIngredient = ({ ingredient, index, dispatch }) => {
       const hoverBoundingRect = sectionRef.current.getBoundingClientRect();
       const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
+      if (!clientOffset) return;
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
 
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
@@ -65,6 +89,7 @@ const DraggableIngredient = ({ ingredient, index, dispatch }) => {
   });
 
   drop(sectionRef);
+  moveRef(sectionRef);
 
   return (
     <section
@@ -72,37 +97,36 @@ const DraggableIngredient = ({ ingredient, index, dispatch }) => {
       className={styles.constructor_element}
       style={{ opacity: isDragging ? 0.5 : 1 }}
     >
-      <DragIcon className={styles.drag_icon} />
-      <section ref={moveRef}>
-        <ConstructorElement
-          price={ingredient.price}
-          text={ingredient.name}
-          thumbnail={ingredient.image}
-          handleClose={() => dispatch(deleteIngredient(ingredient.customId))}
-        />
-      </section>
+      <DragIcon type="primary" className={styles.drag_icon} />
+      <ConstructorElement
+        price={ingredient.price}
+        text={ingredient.name}
+        thumbnail={ingredient.image}
+        handleClose={() => dispatch(deleteIngredient(ingredient.customId))}
+      />
     </section>
   );
 };
 
-export const BurgerConstructor = () => {
-  const dispatch = useDispatch();
+export const BurgerConstructor = (): React.JSX.Element => {
+  const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { isLoading, data: ingredients } = useGetIngredientsQuery();
+  const { isLoading, data: ingredientsData } = useGetIngredientsQuery();
+  const ingredients = ingredientsData || [];
   const [createOrder, { data: orderData, isLoading: isOrderLoading }] =
     useCreateOrderMutation();
 
-  const bun = useSelector((state) => state.burger.bun);
-  const burgerIngredients = useSelector((state) => state.burger.ingredients);
+  const bun = useSelector((state: RootState) => state.burger.bun);
+  const burgerIngredients = useSelector((state: RootState) => state.burger.ingredients);
 
   const [isOrderDetails, setOrderDetails] = useState(false);
 
   const totalPrice = useSelector(selectPrice);
 
-  const [{ isBunOver }, bunRef] = useDrop({
+  const [{ isBunOver }, bunRef] = useDrop<DropItem, unknown, { isBunOver: boolean }>({
     accept: 'bun',
-    drop: (item) => {
+    drop: (item: DropItem) => {
       dispatch(addBun(item.ingredient));
     },
     collect: (monitor) => ({
@@ -110,9 +134,13 @@ export const BurgerConstructor = () => {
     }),
   });
 
-  const [{ isIngredientOver }, ingredientRef] = useDrop({
+  const [{ isIngredientOver }, ingredientRef] = useDrop<
+    DropItem,
+    unknown,
+    { isIngredientOver: boolean }
+  >({
     accept: 'ingredient',
-    drop: (item) => {
+    drop: (item: DropItem) => {
       dispatch(addIngredient(item.ingredient));
     },
     collect: (monitor) => ({
@@ -120,7 +148,7 @@ export const BurgerConstructor = () => {
     }),
   });
 
-  if (isLoading || !ingredients) {
+  if (isLoading || !ingredients.length) {
     return (
       <section className={styles.burger_constructor}>
         <p className="text text_type_main-medium mb-6">Корзина</p>
@@ -130,10 +158,14 @@ export const BurgerConstructor = () => {
   }
 
   const orderIngredients = bun
-    ? [bun._id, ...burgerIngredients.map((item) => item._id), bun._id]
+    ? [
+        bun._id,
+        ...burgerIngredients.map((item: ConstructorIngredient) => item._id),
+        bun._id,
+      ]
     : [];
 
-  async function handleCreate() {
+  async function handleCreate(): Promise<void> {
     const token = localStorage.getItem('accessToken');
     if (!token) {
       navigate('/login', { state: { from: '/' } });
@@ -150,7 +182,7 @@ export const BurgerConstructor = () => {
     }
   }
 
-  function handleClose() {
+  function handleClose(): void {
     setOrderDetails(false);
     dispatch(clearConstructor());
   }
@@ -159,7 +191,7 @@ export const BurgerConstructor = () => {
     return (
       <section className={styles.burger_constructor}>
         <section
-          ref={bunRef}
+          ref={bunRef as unknown as React.Ref<HTMLElement>}
           className={`${styles.bun_top} ${styles.empty_bun} ${isBunOver ? styles.bun_over : ''}`}
         >
           <p className="text text_type_main-default text_color_inactive">
@@ -167,7 +199,7 @@ export const BurgerConstructor = () => {
           </p>
         </section>
         <section
-          ref={ingredientRef}
+          ref={ingredientRef as unknown as React.Ref<HTMLElement>}
           className={`${styles.scrollable_elements}  custom-scroll`}
         >
           <section
@@ -190,7 +222,7 @@ export const BurgerConstructor = () => {
             0
           </p>
           <CurrencyIcon type="primary" className={styles.button_group_icon} />
-          <Button size="large" type="primary" disabled>
+          <Button htmlType="submit" size="large" type="primary" disabled>
             Оформить заказ
           </Button>
         </section>
@@ -198,24 +230,28 @@ export const BurgerConstructor = () => {
     );
   }
 
+  if (!bun) {
+    return <Preloader />;
+  }
+
   return (
     <section className={styles.burger_constructor}>
       <section
-        ref={bunRef}
+        ref={bunRef as unknown as React.Ref<HTMLElement>}
         className={`${styles.bun_top} ${isBunOver ? styles.bun_over : ''}`}
       >
         <ConstructorElement
           handleClose={undefined}
           isLocked
           price={bun.price}
-          text={bun.name + '\n(верх)'}
+          text={`${bun.name} (верх)`}
           thumbnail={bun.image}
           type="top"
         />
       </section>
 
       <section
-        ref={ingredientRef}
+        ref={ingredientRef as unknown as React.Ref<HTMLElement>}
         className={`${styles.scrollable_elements}  custom-scroll`}
       >
         {burgerIngredients.length === 0 ? (
@@ -227,7 +263,7 @@ export const BurgerConstructor = () => {
             </p>
           </section>
         ) : (
-          burgerIngredients.map((ingredient, index) => (
+          burgerIngredients.map((ingredient: ConstructorIngredient, index: number) => (
             <DraggableIngredient
               key={ingredient.customId}
               ingredient={ingredient}
@@ -243,23 +279,28 @@ export const BurgerConstructor = () => {
           handleClose={undefined}
           isLocked
           price={bun.price}
-          text={bun.name + '\n(низ)'}
+          text={`${bun.name} (низ)`}
           thumbnail={bun.image}
           type="bottom"
         />
       </section>
+
       <section className={styles.button_group}>
         <p className={`${styles.button_group_price} text text_type_digits-medium`}>
           {totalPrice}
         </p>
         <CurrencyIcon type="primary" className={styles.button_group_icon} />
-        <Button onClick={handleCreate} size="large" type="primary">
+        <Button htmlType="submit" onClick={handleCreate} size="large" type="primary">
           Оформить заказ
         </Button>
 
         {isOrderDetails && (
-          <Modal title={'Заказ оформлен'} onClose={handleClose}>
-            {isOrderLoading ? <Preloader /> : <OrderDetails orderData={orderData} />}
+          <Modal title="Заказ оформлен" onClose={handleClose}>
+            {isOrderLoading ? (
+              <Preloader />
+            ) : (
+              orderData && <OrderDetails orderData={orderData} />
+            )}
           </Modal>
         )}
       </section>

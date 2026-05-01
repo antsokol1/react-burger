@@ -6,12 +6,17 @@ import { useForgotMutation, useResetMutation } from '@/components/services/user/
 
 import styles from './forgot.module.css';
 
-export const Forgot = () => {
+type PasswordForm = {
+  password: string;
+  token: string;
+};
+
+export const Forgot = (): React.JSX.Element => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [forgot, { isLoading }] = useForgotMutation();
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
     try {
       const result = await forgot(email);
@@ -55,9 +60,9 @@ export const Forgot = () => {
   );
 };
 
-export const Reset = () => {
+export const Reset = (): React.JSX.Element => {
   const navigate = useNavigate();
-  const [passwordForm, setPasswordForm] = useState({
+  const [passwordForm, setPasswordForm] = useState<PasswordForm>({
     password: '',
     token: '',
   });
@@ -70,16 +75,19 @@ export const Reset = () => {
     }
   }, []);
 
-  const handleChange = (field, value) => {
+  const handleChange = (field: string, value: string): void => {
     setPasswordForm({
       ...passwordForm,
       [field]: value,
     });
   };
 
-  async function handleClick() {
+  async function handleClick(): Promise<void> {
     try {
-      const result = await reset(passwordForm.password, passwordForm.token);
+      const result = await reset({
+        password: passwordForm.password,
+        token: passwordForm.token,
+      }).unwrap();
       if (result) {
         localStorage.removeItem('forgotPasswordFlag');
         navigate('/login');
@@ -109,6 +117,7 @@ export const Reset = () => {
           onChange={(event) => handleChange('token', event.target.value)}
         />
         <Button
+          htmlType="submit"
           size="large"
           type="primary"
           onClick={handleClick}

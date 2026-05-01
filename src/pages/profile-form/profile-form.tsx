@@ -10,13 +10,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useUpdateUserMutation } from '@/components/services/user/api';
 import { selectUser, setUser } from '@/components/services/user/userSlice';
 
+import type { AppDispatch } from '@/components/services/store';
+
 import styles from './profile-form.module.css';
 
-export const ProfileForm = () => {
-  const dispatch = useDispatch();
+type UserData = {
+  name: string;
+  email: string;
+  password: string;
+};
+
+export const ProfileForm = (): React.JSX.Element => {
+  const dispatch: AppDispatch = useDispatch();
   const currentUser = useSelector(selectUser);
 
-  const [userData, setUserData] = useState({
+  const [userData, setUserData] = useState<UserData>({
     name: '',
     email: '',
     password: '',
@@ -35,18 +43,19 @@ export const ProfileForm = () => {
   }, [currentUser]);
 
   const isEdited =
-    userData.name !== currentUser.name ||
-    userData.email !== currentUser.email ||
-    userData.password !== '';
+    currentUser &&
+    (userData.name !== currentUser.name ||
+      userData.email !== currentUser.email ||
+      userData.password !== '');
 
-  function handleChange(field, value) {
+  function handleChange(field: string, value: string): void {
     setUserData({
       ...userData,
       [field]: value,
     });
   }
 
-  function handleCancel() {
+  function handleCancel(): void {
     if (currentUser) {
       setUserData({
         name: currentUser.name,
@@ -56,7 +65,7 @@ export const ProfileForm = () => {
     }
   }
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
     try {
       const result = await updateUser(userData).unwrap();
@@ -85,7 +94,6 @@ export const ProfileForm = () => {
         value={userData.email}
       />
       <PasswordInput
-        isIcon
         icon="EditIcon"
         name="password"
         onChange={(event) => handleChange('password', event.target.value)}

@@ -4,13 +4,15 @@ import { NavLink, Outlet } from 'react-router-dom';
 import { useLogoutMutation } from '@/components/services/user/api';
 import { clearUser } from '@/components/services/user/userSlice';
 
+import type { AppDispatch } from '@/components/services/store';
+
 import styles from './profile.module.css';
 
-export const Profile = () => {
-  const dispatch = useDispatch();
+export const Profile = (): React.JSX.Element => {
+  const dispatch: AppDispatch = useDispatch();
   const [logout] = useLogoutMutation();
 
-  async function handleClick() {
+  async function handleClick(): Promise<void> {
     try {
       const result = await logout();
       if (result) {

@@ -1,7 +1,11 @@
 import styles from './modal-overlay.module.css';
 
-export function ModalOverlay({ onClose }) {
-  function handleOverlay(event) {
+type TModalOverlay = {
+  onClose: () => void;
+};
+
+export function ModalOverlay({ onClose }: TModalOverlay): React.JSX.Element {
+  function handleOverlay(event: React.MouseEvent<HTMLDivElement>): void {
     if (event.target === event.currentTarget) {
       onClose();
     }

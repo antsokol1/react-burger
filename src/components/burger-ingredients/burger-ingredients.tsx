@@ -10,17 +10,19 @@ import { selectIngredient } from '../services/ingredients/selectedSlice';
 
 import styles from './burger-ingredients.module.css';
 
-export const BurgerIngredients = () => {
+type TabValue = 'bun' | 'main' | 'sauce';
+
+export const BurgerIngredients = (): React.JSX.Element => {
   const dispatch = useDispatch();
   const { isLoading, data: ingredients } = useGetIngredientsQuery();
 
-  const [tabValue, setTabValue] = useState('bun');
+  const [tabValue, setTabValue] = useState<TabValue>('bun');
 
   const location = useLocation();
 
-  const bunRef = useRef(null);
-  const mainRef = useRef(null);
-  const sauceRef = useRef(null);
+  const bunRef = useRef<HTMLElement>(null);
+  const mainRef = useRef<HTMLElement>(null);
+  const sauceRef = useRef<HTMLElement>(null);
 
   const refs = {
     bun: bunRef,
@@ -34,8 +36,8 @@ export const BurgerIngredients = () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const visibleTab = Object.keys(refs).find(
-              (key) => refs[key].current === entry.target
-            );
+              (key) => refs[key as TabValue].current === entry.target
+            ) as TabValue;
             if (visibleTab) {
               setTabValue(visibleTab);
             }
@@ -54,7 +56,7 @@ export const BurgerIngredients = () => {
       }
     });
 
-    return () => {
+    return (): void => {
       observer.disconnect();
     };
   }, [ingredients]);
@@ -73,17 +75,10 @@ export const BurgerIngredients = () => {
     sauce: ingredients.filter((item) => item.type === 'sauce'),
   };
 
-  function handleTab(value) {
+  function handleTab(value: TabValue): void {
     setTabValue(value);
     refs[value].current?.scrollIntoView({ behavior: 'smooth' });
   }
-
-  // function handleIngredientCard(ingredient) {
-  //   dispatch(selectIngredient(ingredient));
-  //   navigate(`/ingredient/${ingredient._id}`, {
-  //     state: { backgroundLocation: location }
-  //   });
-  // }
 
   return (
     <section className={styles.burger_ingredients}>

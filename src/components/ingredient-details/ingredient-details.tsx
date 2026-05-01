@@ -4,14 +4,16 @@ import { useParams } from 'react-router-dom';
 
 import { useGetIngredientsQuery } from '../services/ingredients/api';
 
+import type { RootState } from '../services/store';
+
 import styles from './ingredient-details.module.css';
 
-export function IngredientDetails() {
+export function IngredientDetails(): React.JSX.Element {
   const { id } = useParams();
   const { isLoading, data: ingredientsData } = useGetIngredientsQuery();
   const ingredients = ingredientsData ? ingredientsData : [];
 
-  const reduxIngredient = useSelector((state) => state.selected?.ingredient);
+  const reduxIngredient = useSelector((state: RootState) => state.selected?.ingredient);
   const apiIngredient = ingredients.find((item) => item._id === id);
 
   const ingredient = reduxIngredient || apiIngredient;
