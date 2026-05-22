@@ -1,10 +1,10 @@
 import { Tab, Preloader } from '@krgaa/react-developer-burger-ui-components';
 import { useRef, useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { useLocation, Link } from 'react-router-dom';
 
 import { IngredientCard } from '@/components/ingredient-card/ingredient-card';
 
+import { useAppDispatch } from '../services/hooks';
 import { useGetIngredientsQuery } from '../services/ingredients/api';
 import { selectIngredient } from '../services/ingredients/selectedSlice';
 
@@ -13,7 +13,7 @@ import styles from './burger-ingredients.module.css';
 type TabValue = 'bun' | 'main' | 'sauce';
 
 export const BurgerIngredients = (): React.JSX.Element => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { isLoading, data: ingredients } = useGetIngredientsQuery();
 
   const [tabValue, setTabValue] = useState<TabValue>('bun');

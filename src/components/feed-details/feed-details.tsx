@@ -1,40 +1,56 @@
 import { CurrencyIcon, Preloader } from '@krgaa/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
+import { useAppSelector } from '../services/hooks';
 import { useGetIngredientsQuery } from '../services/ingredients/api';
 import { useGetOrdersQuery, useGetOrdersByIdQuery } from '../services/orders/api';
 
 import type { Ingredient } from '../services/ingredients/api';
-import type { RootState } from '../services/store';
 
 import styles from './feed-details.module.css';
 
 export function FeedDetails(): React.JSX.Element {
   const { id } = useParams();
-  const { isLoading: isLoadingOrders, data: ordersResponse } = useGetOrdersQuery();
-  const orders = ordersResponse?.orders || [];
 
   const { isLoading: isLoadingIngredients, data: ingredientsData } =
     useGetIngredientsQuery();
   const ingredients = ingredientsData ? ingredientsData : [];
 
-  const reduxOrder = useSelector((state: RootState) => state.selectedOrder?.order);
-  const apiOrder = orders.find((item) => item._id === id);
+  // заказ из Redux
+  const reduxOrder = useAppSelector((state) => state.selectedOrder?.order);
 
-  const { data: orderById, isLoading: isLoadingOrderById } = useGetOrdersByIdQuery(id!, {
-    skip: !id || !!reduxOrder || !!apiOrder,
+  // если нет в Redux
+  const { data: ordersResponse, isLoading: isLoadingOrders } = useGetOrdersQuery();
+  const orders = ordersResponse?.orders || [];
+  const wsOrder = orders.find((item) => item._id === id);
+
+  // Если заказа нет в WebSocket, делаем HTTP запрос
+  const shouldFetchById = !reduxOrder && !wsOrder && id;
+  const {
+    data: httpOrder,
+    isLoading: isLoadingHttpOrder,
+    isError,
+  } = useGetOrdersByIdQuery(id!, {
+    skip: !shouldFetchById,
   });
 
-  // Определяем финальный заказ
-  const order = reduxOrder || apiOrder || orderById;
+  const order = reduxOrder || wsOrder || httpOrder;
 
-  // Проверка загрузки
-  if (isLoadingOrders || isLoadingIngredients || isLoadingOrderById || !order) {
+  const isLoading =
+    isLoadingIngredients ||
+    (isLoadingOrders && !reduxOrder) ||
+    (shouldFetchById && isLoadingHttpOrder);
+
+  if (isLoading) {
     return <Preloader />;
   }
-  if (isLoadingOrders || isLoadingIngredients || !order) {
-    return <Preloader />;
+
+  if (!order || isError) {
+    return (
+      <div className={styles.container}>
+        <p className="text text_type_main-medium">Заказ не найден</p>
+      </div>
+    );
   }
 
   type UniqueIngredient = {
@@ -43,8 +59,10 @@ export function FeedDetails(): React.JSX.Element {
   };
 
   const getUniqueIngredients = (): UniqueIngredient[] => {
+    if (!order.ingredients) return [];
+
     const counts: Record<string, number> = {};
-    order.ingredients?.forEach((ingredientId) => {
+    order.ingredients.forEach((ingredientId) => {
       counts[ingredientId] = (counts[ingredientId] || 0) + 1;
     });
 
@@ -110,25 +128,20 @@ export function FeedDetails(): React.JSX.Element {
 
   return (
     <section className={styles.container}>
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '40px' }}>
+      <div className={styles.number}>
         <p className="text text_type_digits-default">#</p>
         <p className="text text_type_digits-default">{order.number}</p>
       </div>
 
-      <p style={{ marginBottom: '10px' }} className="text text_type_main-medium">
-        {order.name || 'Космический бургер'}
-      </p>
+      <p className="text text_type_main-medium">{order.name || 'Космический бургер'}</p>
 
       <p
-        style={{ marginBottom: '40px' }}
-        className={`text text_type_main-small ${getStatusColor(order.status)}`}
+        className={`text text_type_main-small ${getStatusColor(order.status)} ${styles.status}`}
       >
         {getStatusText(order.status)}
       </p>
 
-      <p style={{ marginBottom: '16px' }} className="text text_type_main-medium">
-        Состав:
-      </p>
+      <p className="text text_type_main-medium">Состав:</p>
 
       <section className={styles.ingredients_list}>
         {uniqueIngredients.map((item, index) => (

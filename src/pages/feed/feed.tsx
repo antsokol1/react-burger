@@ -1,17 +1,15 @@
 import { CurrencyIcon, Preloader } from '@krgaa/react-developer-burger-ui-components';
-import { useDispatch } from 'react-redux';
 import { useLocation, Link } from 'react-router-dom';
 
+import { useAppDispatch } from '@/components/services/hooks';
 import { useGetIngredientsQuery } from '@/components/services/ingredients/api';
 import { useGetOrdersQuery } from '@/components/services/orders/api';
 import { selectOrder } from '@/components/services/orders/selectedOrderSlice';
 
-import type { AppDispatch } from '@/components/services/store';
-
 import styles from './feed.module.css';
 
 export const Feed = (): React.JSX.Element => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { isLoading: isLoadingOrders, data: ordersResponse } = useGetOrdersQuery();
   const { isLoading: isLoadingIngredients, data: ingredientsData } =
     useGetIngredientsQuery();
@@ -52,22 +50,12 @@ export const Feed = (): React.JSX.Element => {
                   </p>
                 </section>
                 <p className="text text_type_main-medium">{order.name}</p>
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}
-                >
+                <div className={styles.main}>
                   <section className={styles.ingredient_list}>
                     {order.ingredients?.map((ingredient, index) => (
                       <div
                         key={`${order._id}-${index}`}
                         className={styles.ingredient_icon}
-                        style={{
-                          zIndex: 6 - index,
-                          transform: `translateX(-${index * 16}px)`,
-                        }}
                       >
                         <img
                           className={styles.ingredient_image}

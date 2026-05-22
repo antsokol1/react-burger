@@ -5,12 +5,10 @@ import {
   Button,
 } from '@krgaa/react-developer-burger-ui-components';
 import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 
+import { useAppDispatch, useAppSelector } from '@/components/services/hooks';
 import { useUpdateUserMutation } from '@/components/services/user/api';
 import { selectUser, setUser } from '@/components/services/user/userSlice';
-
-import type { AppDispatch } from '@/components/services/store';
 
 import styles from './profile-form.module.css';
 
@@ -21,8 +19,8 @@ type UserData = {
 };
 
 export const ProfileForm = (): React.JSX.Element => {
-  const dispatch: AppDispatch = useDispatch();
-  const currentUser = useSelector(selectUser);
+  const dispatch = useAppDispatch();
+  const currentUser = useAppSelector(selectUser);
 
   const [userData, setUserData] = useState<UserData>({
     name: '',

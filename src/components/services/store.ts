@@ -28,5 +28,12 @@ export const store = configureStore({
   },
 });
 
+// Добавьте console.log для проверки
+console.log('Store initialized with reducers:', {
+  hasSelected: !!store.getState().selected,
+  hasUser: !!store.getState().user,
+  hasSelectedOrder: !!store.getState().selectedOrder,
+});
+
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

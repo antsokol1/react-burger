@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { Routes, Route, useLocation } from 'react-router-dom';
 
 import { FeedPage } from '@/pages/feed-page/feed-page';
@@ -17,12 +16,11 @@ import { AppHeader } from '@components/app-header/app-header';
 import { IngredientDetails } from '@components/ingredient-details/ingredient-details';
 import { Modal } from '@components/modal/modal';
 import { ProtectedRoute } from '@components/protected-route';
+import { useAppDispatch } from '@components/services/hooks';
 
 import { ProfileForm } from '../../pages/profile-form/profile-form';
 import { FeedDetails } from '../feed-details/feed-details';
 import { checkUserAuth } from '../services/user/userSlice';
-
-import type { AppDispatch } from '../services/store';
 
 import styles from './app.module.css';
 
@@ -30,7 +28,7 @@ export const App = (): React.JSX.Element => {
   const location = useLocation();
   const backgroundLocation = location.state?.backgroundLocation;
 
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(checkUserAuth());

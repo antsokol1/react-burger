@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import { FeedDetails } from '@/components/feed-details/feed-details';
+import { useAppDispatch } from '@/components/services/hooks';
 import {
   useGetOrdersQuery,
   useGetOrdersByIdQuery,
@@ -10,12 +10,11 @@ import {
 import { selectOrder } from '@/components/services/orders/selectedOrderSlice';
 
 import type { Order } from '@/components/services/orders/api';
-import type { AppDispatch } from '@/components/services/store';
 
 import styles from './feed-page.module.css';
 
 export const FeedPage = (): React.JSX.Element => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { id } = useParams();
   const { isLoading, data: ordersResponse } = useGetOrdersQuery();
   const orders: Order[] = ordersResponse?.orders || [];

@@ -1,17 +1,15 @@
 import { CurrencyIcon, Preloader } from '@krgaa/react-developer-burger-ui-components';
-import { useDispatch } from 'react-redux';
 import { useLocation, Link } from 'react-router-dom';
 
+import { useAppDispatch } from '@/components/services/hooks';
 import { useGetIngredientsQuery } from '@/components/services/ingredients/api';
 import { useGetProfileOrdersQuery } from '@/components/services/orders/api';
 import { selectOrder } from '@/components/services/orders/selectedOrderSlice';
 
-import type { AppDispatch } from '@/components/services/store';
-
 import styles from './profile-orders.module.css';
 
 export const ProfileOrders = (): React.JSX.Element => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { isLoading: isLoadingOrders, data: ordersResponse } =
     useGetProfileOrdersQuery();
   const { isLoading: isLoadingIngredients, data: ingredientsData } =

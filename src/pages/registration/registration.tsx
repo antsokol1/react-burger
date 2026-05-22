@@ -1,12 +1,10 @@
 import { Input, Button } from '@krgaa/react-developer-burger-ui-components';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import { useAppDispatch } from '@/components/services/hooks';
 import { useRegisterMutation } from '@/components/services/user/api';
 import { setUser } from '@/components/services/user/userSlice';
-
-import type { AppDispatch } from '@/components/services/store';
 
 import styles from './registration.module.css';
 
@@ -17,7 +15,7 @@ type UserData = {
 };
 
 export const Registration = (): React.JSX.Element => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [userData, setUserData] = useState<UserData>({
     name: '',

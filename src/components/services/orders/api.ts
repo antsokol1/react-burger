@@ -19,6 +19,13 @@ export type OrdersResponse = {
   totalToday: number;
 };
 
+type OrderResponse = {
+  success: boolean;
+  order: Order;
+  total: number;
+  totalToday: number;
+};
+
 export const ordersApi = createApi({
   reducerPath: 'ordersApi',
   baseQuery: fetchBaseQuery({
@@ -58,6 +65,9 @@ export const ordersApi = createApi({
 
     getOrdersById: builder.query<Order | null, string>({
       query: (id_order) => `/api/orders/${id_order}`,
+      transformResponse: (response: OrderResponse) => {
+        return response.order;
+      },
     }),
 
     getProfileOrders: builder.query<OrdersResponse, void>({
