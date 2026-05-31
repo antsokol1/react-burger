@@ -8,7 +8,7 @@ type SelectedState = {
   ingredient: Ingredient | null; // может быть ингредиент или null
 };
 
-const initialState: SelectedState = {
+export const initialState: SelectedState = {
   ingredient: null,
 };
 

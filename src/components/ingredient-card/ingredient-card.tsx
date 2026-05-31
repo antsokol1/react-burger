@@ -33,6 +33,8 @@ export const IngredientCard = ({
     <article
       ref={dragRef as unknown as React.Ref<HTMLElement>}
       className={`${styles.ingredient_card} ${isDragging ? styles.dragging : ''}`}
+      data-testid="ingredient-card"
+      data-type={ingredient.type}
     >
       {counter > 0 && <Counter count={counter} size="default" />}
       <img src={ingredient.image} alt={ingredient.name} />

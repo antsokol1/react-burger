@@ -81,7 +81,7 @@ export const BurgerIngredients = (): React.JSX.Element => {
   }
 
   return (
-    <section className={styles.burger_ingredients}>
+    <section className={styles.burger_ingredients} data-testid="burger-ingredients">
       <nav>
         <ul className={styles.menu}>
           <Tab value="bun" active={tabValue === 'bun'} onClick={() => handleTab('bun')}>
@@ -105,7 +105,7 @@ export const BurgerIngredients = (): React.JSX.Element => {
       </nav>
 
       <section className={`${styles.all_ingredients} custom-scroll`}>
-        <section ref={bunRef}>
+        <section ref={bunRef} data-testid="buns-section">
           <p className={`${styles.ingredient_kind} text text_type_main-small`}>Булки</p>
           <ul className={styles.ingredients_grid}>
             {groupedIngredients.bun.map((ingredient) => (
@@ -123,7 +123,7 @@ export const BurgerIngredients = (): React.JSX.Element => {
           </ul>
         </section>
 
-        <section ref={mainRef}>
+        <section ref={mainRef} data-testid="mains-section">
           <p className={`${styles.ingredient_kind} text text_type_main-small`}>
             Начинки
           </p>
@@ -143,7 +143,7 @@ export const BurgerIngredients = (): React.JSX.Element => {
           </ul>
         </section>
 
-        <section ref={sauceRef}>
+        <section ref={sauceRef} data-testid="sauces-section">
           <p className={`${styles.ingredient_kind} text text_type_main-small`}>Соусы</p>
           <ul className={styles.ingredients_grid}>
             {groupedIngredients.sauce.map((ingredient) => (
