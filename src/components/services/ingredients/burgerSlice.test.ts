@@ -10,6 +10,7 @@ import burgerReducer, {
   selectIngredients,
   selectCount,
   selectPrice,
+  initialState,
 } from './burgerSlice';
 
 import type { RootState } from '../store';
@@ -64,43 +65,39 @@ describe('burgerSlice', () => {
 
   it('должен возвращать начальное состояние', () => {
     const result = burgerReducer(undefined, { type: '' });
-    expect(result).toEqual({ bun: null, ingredients: [] });
+    expect(result).toEqual(initialState);
   });
 
   it('должен добавлять булку при addBun', () => {
-    const startState = { bun: null, ingredients: [] };
-    const result = burgerReducer(startState, addBun(mockBun));
+    const result = burgerReducer(initialState, addBun(mockBun));
     expect(result.bun).toEqual(mockBun);
     expect(result.ingredients).toEqual([]);
   });
 
   it('должен добавлять ингредиент с customId при addIngredient', () => {
-    const startState = { bun: mockBun, ingredients: [] };
-    const result = burgerReducer(startState, addIngredient(mockIngredient1));
+    const stateWithBun = burgerReducer(initialState, addBun(mockBun));
+    const result = burgerReducer(stateWithBun, addIngredient(mockIngredient1));
     expect(result.ingredients).toHaveLength(1);
     expect(result.ingredients[0]).toMatchObject(mockIngredient1);
     expect(result.ingredients[0].customId).toBeDefined();
   });
 
   it('должен удалять ингредиент по customId при deleteIngredient', () => {
-    // Сначала добавляем ингредиент
-    const state = burgerReducer(
-      { bun: null, ingredients: [] },
-      addIngredient(mockIngredient1)
-    );
+    // Сначала добавляем булку и ингредиент
+    let state = burgerReducer(initialState, addBun(mockBun));
+    state = burgerReducer(state, addIngredient(mockIngredient1));
     const customId = state.ingredients[0].customId;
 
     // Затем удаляем
     const result = burgerReducer(state, deleteIngredient(customId));
     expect(result.ingredients).toHaveLength(0);
+    expect(result.bun).toEqual(mockBun); // булка должна остаться
   });
 
   it('должен перемещать ингредиент при moveIngredient', () => {
-    // Добавляем три ингредиента
-    let state = burgerReducer(
-      { bun: null, ingredients: [] },
-      addIngredient(mockIngredient1)
-    );
+    // Добавляем булку и три ингредиента
+    let state = burgerReducer(initialState, addBun(mockBun));
+    state = burgerReducer(state, addIngredient(mockIngredient1));
     state = burgerReducer(state, addIngredient(mockIngredient2));
     state = burgerReducer(state, addIngredient(mockIngredient1));
 
@@ -113,15 +110,13 @@ describe('burgerSlice', () => {
   });
 
   it('должен очищать конструктор при clearConstructor', () => {
-    const startState = {
-      bun: mockBun,
-      ingredients: [mockIngredient1, mockIngredient2].map((ing) => ({
-        ...ing,
-        customId: '1',
-      })),
-    };
-    const result = burgerReducer(startState, clearConstructor());
-    expect(result).toEqual({ bun: null, ingredients: [] });
+    // Создаем заполненное состояние
+    let state = burgerReducer(initialState, addBun(mockBun));
+    state = burgerReducer(state, addIngredient(mockIngredient1));
+    state = burgerReducer(state, addIngredient(mockIngredient2));
+
+    const result = burgerReducer(state, clearConstructor());
+    expect(result).toEqual(initialState); // ← сравниваем с initialState
   });
 
   describe('селекторы', () => {
@@ -175,10 +170,7 @@ describe('burgerSlice', () => {
 
     it('selectPrice должен возвращать 0 если ничего нет', () => {
       const mockState = {
-        burger: {
-          bun: null,
-          ingredients: [],
-        },
+        burger: { initialState },
       } as RootState;
 
       const result = selectPrice(mockState);

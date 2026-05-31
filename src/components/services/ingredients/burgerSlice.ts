@@ -22,7 +22,7 @@ type MoveState = {
   hoverId: string;
 };
 
-const initialState: BurgerState = {
+export const initialState: BurgerState = {
   bun: null,
   ingredients: [],
 };
