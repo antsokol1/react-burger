@@ -1,6 +1,10 @@
 import { describe, it, expect } from 'vitest';
 
-import selectedReducer, { selectIngredient, clearIngredient } from './selectedSlice';
+import selectedReducer, {
+  selectIngredient,
+  clearIngredient,
+  initialState,
+} from './selectedSlice';
 
 import type { Ingredient } from '../ingredients/api';
 
@@ -22,18 +26,23 @@ describe('selectedSlice', () => {
 
   it('должен возвращать начальное состояние', () => {
     const result = selectedReducer(undefined, { type: '' });
-    expect(result).toEqual({ ingredient: null });
+    expect(result).toEqual(initialState);
   });
 
   it('selectIngredient должен выбирать ингредиент', () => {
-    const mockState = { ingredient: null };
-    const result = selectedReducer(mockState, selectIngredient(mockIngredient));
+    const result = selectedReducer(initialState, selectIngredient(mockIngredient));
     expect(result.ingredient).toEqual(mockIngredient);
   });
 
   it('clearIngredient должен очищать выбранный ингредиент', () => {
-    const mockState = { ingredient: mockIngredient };
-    const result = selectedReducer(mockState, clearIngredient());
+    // Сначала выбираем ингредиент
+    const stateWithIngredient = selectedReducer(
+      initialState,
+      selectIngredient(mockIngredient)
+    );
+    // Затем очищаем
+    const result = selectedReducer(stateWithIngredient, clearIngredient());
     expect(result.ingredient).toBeNull();
+    expect(result).toEqual(initialState);
   });
 });

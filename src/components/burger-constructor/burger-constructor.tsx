@@ -32,6 +32,13 @@ import type { AppDispatch } from '../services/store';
 
 import styles from './burger-constructor.module.css';
 
+const TEST_ID = {
+  CONSTRUCTOR_BUN_AREA: 'constructor-bun-area',
+  CONSTRUCTOR_INGREDIENTS_AREA: 'constructor-ingredients-area',
+  TOTAL_PRICE: 'total-price',
+  ORDER_BUTTON: 'order-button',
+} as const;
+
 type DraggableIngredientProps = {
   ingredient: ConstructorIngredient;
   index: number;
@@ -194,7 +201,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
         <section
           ref={bunRef as unknown as React.Ref<HTMLElement>}
           className={`${styles.bun_top} ${styles.empty_bun} ${isBunOver ? styles.bun_over : ''}`}
-          data-testid="constructor-bun-area"
+          data-testid={TEST_ID.CONSTRUCTOR_BUN_AREA}
         >
           <p className="text text_type_main-default text_color_inactive">
             Выберите булку
@@ -203,7 +210,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
         <section
           ref={ingredientRef as unknown as React.Ref<HTMLElement>}
           className={`${styles.scrollable_elements}  custom-scroll`}
-          data-testid="constructor-ingredients-area"
+          data-testid={TEST_ID.CONSTRUCTOR_INGREDIENTS_AREA}
         >
           <section
             className={`${styles.empty_ingredient} ${styles.constructor_element} ${isIngredientOver ? styles.ingredient_over : ''}`}
@@ -215,7 +222,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
         </section>
         <section
           className={`${styles.empty_bun} ${styles.bun_top} ${isBunOver ? styles.bun_over : ''}`}
-          data-testid="constructor-bun-area"
+          data-testid={TEST_ID.CONSTRUCTOR_BUN_AREA}
         >
           <p className="text text_type_main-default text_color_inactive">
             Выберите булку
@@ -223,14 +230,14 @@ export const BurgerConstructor = (): React.JSX.Element => {
         </section>
         <section className={styles.button_group}>
           <p
-            data-testid="total-price"
+            data-testid={TEST_ID.TOTAL_PRICE}
             className={`${styles.button_group_price} text text_type_digits-medium`}
           >
             0
           </p>
           <CurrencyIcon type="primary" className={styles.button_group_icon} />
           <Button
-            data-testid="order-button"
+            data-testid={TEST_ID.ORDER_BUTTON}
             htmlType="submit"
             size="large"
             type="primary"
@@ -252,7 +259,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
       <section
         ref={bunRef as unknown as React.Ref<HTMLElement>}
         className={`${styles.bun_top} ${isBunOver ? styles.bun_over : ''}`}
-        data-testid="constructor-bun-area"
+        data-testid={TEST_ID.CONSTRUCTOR_BUN_AREA}
       >
         <ConstructorElement
           handleClose={undefined}
@@ -267,7 +274,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
       <section
         ref={ingredientRef as unknown as React.Ref<HTMLElement>}
         className={`${styles.scrollable_elements}  custom-scroll`}
-        data-testid="constructor-ingredients-area"
+        data-testid={TEST_ID.CONSTRUCTOR_INGREDIENTS_AREA}
       >
         {burgerIngredients.length === 0 ? (
           <section
@@ -290,7 +297,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
       </section>
 
       <section
-        data-testid="constructor-bun-area"
+        data-testid={TEST_ID.CONSTRUCTOR_BUN_AREA}
         className={`${styles.bun_bottom} ${isBunOver ? styles.bun_over : ''}`}
       >
         <ConstructorElement
@@ -305,14 +312,14 @@ export const BurgerConstructor = (): React.JSX.Element => {
 
       <section className={styles.button_group}>
         <p
-          data-testid="total-price"
+          data-testid={TEST_ID.TOTAL_PRICE}
           className={`${styles.button_group_price} text text_type_digits-medium`}
         >
           {totalPrice}
         </p>
         <CurrencyIcon type="primary" className={styles.button_group_icon} />
         <Button
-          data-testid="order-button"
+          data-testid={TEST_ID.ORDER_BUTTON}
           htmlType="submit"
           onClick={handleCreate}
           size="large"

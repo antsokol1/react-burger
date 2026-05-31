@@ -8,7 +8,7 @@ type SelectedState = {
   order: Order | null;
 };
 
-const initialState: SelectedState = {
+export const initialState: SelectedState = {
   order: null,
 };
 

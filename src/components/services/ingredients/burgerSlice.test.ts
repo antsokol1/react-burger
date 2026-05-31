@@ -170,7 +170,10 @@ describe('burgerSlice', () => {
 
     it('selectPrice должен возвращать 0 если ничего нет', () => {
       const mockState = {
-        burger: { initialState },
+        burger: {
+          bun: null,
+          ingredients: [],
+        },
       } as RootState;
 
       const result = selectPrice(mockState);

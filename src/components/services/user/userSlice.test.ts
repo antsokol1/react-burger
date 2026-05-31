@@ -7,6 +7,7 @@ import userReducer, {
   setIsAuthChecked,
   selectIsAuthChecked,
   selectUser,
+  initialState,
 } from './userSlice';
 
 import type { RootState } from '../store';
@@ -24,29 +25,35 @@ describe('userSlice', () => {
 
   it('должен возвращать начальное состояние', () => {
     const result = userReducer(undefined, { type: '' });
-    expect(result).toEqual({ user: null, isAuthChecked: false });
+    expect(result).toEqual(initialState);
   });
 
   it('setUser должен устанавливать пользователя', () => {
-    const result = userReducer({ user: null, isAuthChecked: false }, setUser(mockUser));
+    const result = userReducer(initialState, setUser(mockUser));
     expect(result.user).toEqual(mockUser);
+    expect(result.isAuthChecked).toBe(false);
   });
 
   it('setUser с null должен сбрасывать пользователя', () => {
-    const result = userReducer({ user: mockUser, isAuthChecked: true }, setUser(null));
+    // Сначала устанавливаем пользователя
+    const stateWithUser = userReducer(initialState, setUser(mockUser));
+    // Затем сбрасываем через setUser(null)
+    const result = userReducer(stateWithUser, setUser(null));
     expect(result.user).toBeNull();
+    expect(result.isAuthChecked).toBe(false);
   });
 
   it('setIsAuthChecked должен устанавливать флаг проверки', () => {
-    const result = userReducer(
-      { user: null, isAuthChecked: false },
-      setIsAuthChecked(true)
-    );
+    const result = userReducer(initialState, setIsAuthChecked(true));
     expect(result.isAuthChecked).toBe(true);
+    expect(result.user).toBeNull();
   });
 
   it('clearUser должен очищать пользователя и устанавливать isAuthChecked в true', () => {
-    const result = userReducer({ user: mockUser, isAuthChecked: false }, clearUser());
+    // Сначала устанавливаем пользователя
+    const stateWithUser = userReducer(initialState, setUser(mockUser));
+    // Затем вызываем clearUser
+    const result = userReducer(stateWithUser, clearUser());
     expect(result.user).toBeNull();
     expect(result.isAuthChecked).toBe(true);
   });
@@ -62,7 +69,7 @@ describe('userSlice', () => {
   });
 
   it('selectUser должен возвращать null если пользователя нет', () => {
-    const state = { user: { user: null, isAuthChecked: true } } as RootState;
+    const state = { user: initialState } as RootState; // ← 4. Используем initialState
     expect(selectUser(state)).toBeNull();
   });
 });

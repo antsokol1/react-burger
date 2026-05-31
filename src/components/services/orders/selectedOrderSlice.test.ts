@@ -1,6 +1,10 @@
 import { describe, it, expect } from 'vitest';
 
-import selectedOrderReducer, { selectOrder, clearOrder } from './selectedOrderSlice';
+import selectedOrderReducer, {
+  selectOrder,
+  clearOrder,
+  initialState,
+} from './selectedOrderSlice';
 
 import type { Order } from './api';
 
@@ -17,18 +21,22 @@ describe('selectedOrderSlice', () => {
 
   it('должен возвращать начальное состояние', () => {
     const result = selectedOrderReducer(undefined, { type: '' });
-    expect(result).toEqual({ order: null });
+    expect(result).toEqual(initialState);
   });
 
   it('selectOrder должен выбирать заказ', () => {
-    const mockState = { order: null };
-    const result = selectedOrderReducer(mockState, selectOrder(mockOrder));
+    const result = selectedOrderReducer(initialState, selectOrder(mockOrder));
     expect(result.order).toEqual(mockOrder);
   });
 
   it('clearOrder должен очищать выбранный заказ', () => {
-    const mockState = { order: mockOrder };
-    const result = selectedOrderReducer(mockState, clearOrder());
+    // Сначала выбираем ингредиент
+    const stateWithIngredient = selectedOrderReducer(
+      initialState,
+      selectOrder(mockOrder)
+    );
+    // Затем очищаем
+    const result = selectedOrderReducer(stateWithIngredient, clearOrder());
     expect(result.order).toBeNull();
   });
 });
