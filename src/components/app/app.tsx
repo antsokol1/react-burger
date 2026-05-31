@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { Routes, Route, useLocation } from 'react-router-dom';
 
+import { FeedPage } from '@/pages/feed-page/feed-page';
 import { Feed } from '@/pages/feed/feed';
 import { Forgot, Reset } from '@/pages/forgot/forgot';
 import { Home } from '@/pages/home/home';
@@ -9,17 +9,18 @@ import { IngredientPage } from '@/pages/ingredient-page/ingredient-page';
 import { Login } from '@/pages/login/login';
 import { NotFound } from '@/pages/not-found/not-found';
 import { ProfileOrder } from '@/pages/profile-order/profile-order';
+import { ProfileOrders } from '@/pages/profile-orders/profile-orders';
 import { Profile } from '@/pages/profile/profile';
 import { Registration } from '@/pages/registration/registration';
 import { AppHeader } from '@components/app-header/app-header';
 import { IngredientDetails } from '@components/ingredient-details/ingredient-details';
 import { Modal } from '@components/modal/modal';
 import { ProtectedRoute } from '@components/protected-route';
+import { useAppDispatch } from '@components/services/hooks';
 
 import { ProfileForm } from '../../pages/profile-form/profile-form';
+import { FeedDetails } from '../feed-details/feed-details';
 import { checkUserAuth } from '../services/user/userSlice';
-
-import type { AppDispatch } from '../services/store';
 
 import styles from './app.module.css';
 
@@ -27,7 +28,7 @@ export const App = (): React.JSX.Element => {
   const location = useLocation();
   const backgroundLocation = location.state?.backgroundLocation;
 
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(checkUserAuth());
@@ -42,6 +43,7 @@ export const App = (): React.JSX.Element => {
           <Route path="/" element={<Home />} />
           <Route path="/ingredient/:id" element={<IngredientPage />} />
           <Route path="/feed" element={<Feed />} />
+          <Route path="/feed/:id" element={<FeedPage />} />
 
           <Route
             path="/login"
@@ -62,7 +64,8 @@ export const App = (): React.JSX.Element => {
 
           <Route path="/profile" element={<ProtectedRoute component={<Profile />} />}>
             <Route index element={<ProfileForm />} />
-            <Route path="orders" element={<ProfileOrder />} />
+            <Route path="orders" element={<ProfileOrders />} />
+            <Route path="orders/:id" element={<ProfileOrder />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />
@@ -76,6 +79,22 @@ export const App = (): React.JSX.Element => {
               element={
                 <Modal title="Детали ингредиента" onClose={() => window.history.back()}>
                   <IngredientDetails />
+                </Modal>
+              }
+            />
+            <Route
+              path="/feed/:id"
+              element={
+                <Modal title={''} onClose={() => window.history.back()}>
+                  <FeedDetails />
+                </Modal>
+              }
+            />
+            <Route
+              path="/profile/orders/:id"
+              element={
+                <Modal title={''} onClose={() => window.history.back()}>
+                  <FeedDetails />
                 </Modal>
               }
             />

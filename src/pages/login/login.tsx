@@ -1,12 +1,10 @@
 import { Input, Button } from '@krgaa/react-developer-burger-ui-components';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import { useAppDispatch } from '@/components/services/hooks';
 import { useLoginMutation } from '@/components/services/user/api';
 import { setUser } from '@/components/services/user/userSlice';
-
-import type { AppDispatch } from '@/components/services/store';
 
 import styles from './login.module.css';
 
@@ -16,7 +14,7 @@ type UserData = {
 };
 
 export const Login = (): React.JSX.Element => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [userData, setUserData] = useState<UserData>({
     email: '',

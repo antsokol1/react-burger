@@ -41,13 +41,21 @@ export const ingredientsApi = createApi({
       transformResponse: (response: IngredientsResponse) => response.data,
     }),
     createOrder: builder.mutation<OrderResponse, string[]>({
-      query: (ingredients) => ({
-        url: '/api/orders',
-        method: 'POST',
-        body: {
-          ingredients: ingredients,
-        },
-      }),
+      query: (ingredients) => {
+        const token = localStorage.getItem('accessToken');
+        return {
+          url: '/api/orders',
+          method: 'POST',
+          body: {
+            ingredients: ingredients,
+          },
+          headers: token
+            ? {
+                Authorization: token,
+              }
+            : {},
+        };
+      },
     }),
   }),
 });

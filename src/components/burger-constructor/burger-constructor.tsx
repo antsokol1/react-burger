@@ -7,11 +7,11 @@ import {
 } from '@krgaa/react-developer-burger-ui-components';
 import { useState, useRef } from 'react';
 import { useDrop, useDrag, type DropTargetMonitor } from 'react-dnd';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { Modal } from '@/components/modal/modal';
 import { OrderDetails } from '@/components/order-details/order-details';
+import { useAppDispatch, useAppSelector } from '@components/services/hooks';
 
 import {
   useGetIngredientsQuery,
@@ -28,7 +28,7 @@ import {
 
 import type { Ingredient } from '../services/ingredients/api';
 import type { ConstructorIngredient } from '../services/ingredients/burgerSlice';
-import type { AppDispatch, RootState } from '../services/store';
+import type { AppDispatch } from '../services/store';
 
 import styles from './burger-constructor.module.css';
 
@@ -109,7 +109,7 @@ const DraggableIngredient = ({
 };
 
 export const BurgerConstructor = (): React.JSX.Element => {
-  const dispatch: AppDispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const { isLoading, data: ingredientsData } = useGetIngredientsQuery();
@@ -117,12 +117,12 @@ export const BurgerConstructor = (): React.JSX.Element => {
   const [createOrder, { data: orderData, isLoading: isOrderLoading }] =
     useCreateOrderMutation();
 
-  const bun = useSelector((state: RootState) => state.burger.bun);
-  const burgerIngredients = useSelector((state: RootState) => state.burger.ingredients);
+  const bun = useAppSelector((state) => state.burger.bun);
+  const burgerIngredients = useAppSelector((state) => state.burger.ingredients);
 
   const [isOrderDetails, setOrderDetails] = useState(false);
 
-  const totalPrice = useSelector(selectPrice);
+  const totalPrice = useAppSelector(selectPrice);
 
   const [{ isBunOver }, bunRef] = useDrop<DropItem, unknown, { isBunOver: boolean }>({
     accept: 'bun',

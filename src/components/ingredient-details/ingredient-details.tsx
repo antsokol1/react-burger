@@ -1,10 +1,8 @@
 import { Preloader } from '@krgaa/react-developer-burger-ui-components';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
+import { useAppSelector } from '../services/hooks';
 import { useGetIngredientsQuery } from '../services/ingredients/api';
-
-import type { RootState } from '../services/store';
 
 import styles from './ingredient-details.module.css';
 
@@ -13,7 +11,7 @@ export function IngredientDetails(): React.JSX.Element {
   const { isLoading, data: ingredientsData } = useGetIngredientsQuery();
   const ingredients = ingredientsData ? ingredientsData : [];
 
-  const reduxIngredient = useSelector((state: RootState) => state.selected?.ingredient);
+  const reduxIngredient = useAppSelector((state) => state.selected?.ingredient);
   const apiIngredient = ingredients.find((item) => item._id === id);
 
   const ingredient = reduxIngredient || apiIngredient;

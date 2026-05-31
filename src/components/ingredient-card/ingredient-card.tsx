@@ -1,7 +1,7 @@
 import { CurrencyIcon, Counter } from '@krgaa/react-developer-burger-ui-components';
 import { useDrag } from 'react-dnd';
-import { useSelector } from 'react-redux';
 
+import { useAppSelector } from '../services/hooks';
 import { selectCount } from '../services/ingredients/burgerSlice';
 
 import type { Ingredient } from '../services/ingredients/api';
@@ -15,7 +15,7 @@ type IngredientCardProps = {
 export const IngredientCard = ({
   ingredient,
 }: IngredientCardProps): React.JSX.Element => {
-  const countMap = useSelector(selectCount);
+  const countMap = useAppSelector(selectCount);
 
   const counter = countMap[ingredient._id] || 0;
 
