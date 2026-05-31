@@ -13,7 +13,10 @@ type OrderDetailsProps = {
 export function OrderDetails({ orderData }: OrderDetailsProps): React.JSX.Element {
   return (
     <section className={styles.order_details}>
-      <p className={`${styles.order} text text_type_digits-large`}>
+      <p
+        data-testid="order-number"
+        className={`${styles.order} text text_type_digits-large`}
+      >
         {orderData.order.number}
       </p>
       <p className="text text_type_main-default">идентификатор заказа</p>
@@ -23,7 +26,10 @@ export function OrderDetails({ orderData }: OrderDetailsProps): React.JSX.Elemen
         alt={'Заказ начали готовить'}
       />
       <p className="text text_type_main-default">Ваш заказ начали готовить</p>
-      <p className={`${styles.description_add} text text_type_main-default`}>
+      <p
+        data-testid="order-status"
+        className={`${styles.description_add} text text_type_main-default`}
+      >
         Дождитесь готовности на орбитальной станции
       </p>
     </section>

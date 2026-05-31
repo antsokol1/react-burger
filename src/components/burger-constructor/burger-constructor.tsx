@@ -96,6 +96,7 @@ const DraggableIngredient = ({
       ref={sectionRef}
       className={styles.constructor_element}
       style={{ opacity: isDragging ? 0.5 : 1 }}
+      data-testid="constructor-ingredient"
     >
       <DragIcon type="primary" className={styles.drag_icon} />
       <ConstructorElement
@@ -193,6 +194,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
         <section
           ref={bunRef as unknown as React.Ref<HTMLElement>}
           className={`${styles.bun_top} ${styles.empty_bun} ${isBunOver ? styles.bun_over : ''}`}
+          data-testid="constructor-bun-area"
         >
           <p className="text text_type_main-default text_color_inactive">
             Выберите булку
@@ -201,6 +203,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
         <section
           ref={ingredientRef as unknown as React.Ref<HTMLElement>}
           className={`${styles.scrollable_elements}  custom-scroll`}
+          data-testid="constructor-ingredients-area"
         >
           <section
             className={`${styles.empty_ingredient} ${styles.constructor_element} ${isIngredientOver ? styles.ingredient_over : ''}`}
@@ -212,17 +215,27 @@ export const BurgerConstructor = (): React.JSX.Element => {
         </section>
         <section
           className={`${styles.empty_bun} ${styles.bun_top} ${isBunOver ? styles.bun_over : ''}`}
+          data-testid="constructor-bun-area"
         >
           <p className="text text_type_main-default text_color_inactive">
             Выберите булку
           </p>
         </section>
         <section className={styles.button_group}>
-          <p className={`${styles.button_group_price} text text_type_digits-medium`}>
+          <p
+            data-testid="total-price"
+            className={`${styles.button_group_price} text text_type_digits-medium`}
+          >
             0
           </p>
           <CurrencyIcon type="primary" className={styles.button_group_icon} />
-          <Button htmlType="submit" size="large" type="primary" disabled>
+          <Button
+            data-testid="order-button"
+            htmlType="submit"
+            size="large"
+            type="primary"
+            disabled
+          >
             Оформить заказ
           </Button>
         </section>
@@ -235,10 +248,11 @@ export const BurgerConstructor = (): React.JSX.Element => {
   }
 
   return (
-    <section className={styles.burger_constructor}>
+    <section className={styles.burger_constructor} data-testid="constructor-area">
       <section
         ref={bunRef as unknown as React.Ref<HTMLElement>}
         className={`${styles.bun_top} ${isBunOver ? styles.bun_over : ''}`}
+        data-testid="constructor-bun-area"
       >
         <ConstructorElement
           handleClose={undefined}
@@ -253,6 +267,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
       <section
         ref={ingredientRef as unknown as React.Ref<HTMLElement>}
         className={`${styles.scrollable_elements}  custom-scroll`}
+        data-testid="constructor-ingredients-area"
       >
         {burgerIngredients.length === 0 ? (
           <section
@@ -274,7 +289,10 @@ export const BurgerConstructor = (): React.JSX.Element => {
         )}
       </section>
 
-      <section className={`${styles.bun_bottom} ${isBunOver ? styles.bun_over : ''}`}>
+      <section
+        data-testid="constructor-bun-area"
+        className={`${styles.bun_bottom} ${isBunOver ? styles.bun_over : ''}`}
+      >
         <ConstructorElement
           handleClose={undefined}
           isLocked
@@ -286,11 +304,20 @@ export const BurgerConstructor = (): React.JSX.Element => {
       </section>
 
       <section className={styles.button_group}>
-        <p className={`${styles.button_group_price} text text_type_digits-medium`}>
+        <p
+          data-testid="total-price"
+          className={`${styles.button_group_price} text text_type_digits-medium`}
+        >
           {totalPrice}
         </p>
         <CurrencyIcon type="primary" className={styles.button_group_icon} />
-        <Button htmlType="submit" onClick={handleCreate} size="large" type="primary">
+        <Button
+          data-testid="order-button"
+          htmlType="submit"
+          onClick={handleCreate}
+          size="large"
+          type="primary"
+        >
           Оформить заказ
         </Button>
 

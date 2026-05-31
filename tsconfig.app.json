@@ -31,6 +31,8 @@
       "@utils/*": ["src/utils/*"]
     },
 
+    "ignoreDeprecations": "6.0",
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
